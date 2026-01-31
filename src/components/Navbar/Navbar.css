@@ -1,0 +1,131 @@
+/* Navbar container */
+.nav-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 9vh;
+    background-color: white;
+    padding: 0 95px;
+    border-bottom: 2px solid #ebebeb;
+    /* Fixed at top */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    column-gap: 10px;
+    text-decoration: none;
+    font-size: 25px;
+    justify-self: center;
+}
+
+.logo img {
+    width: 40px;
+}
+
+.nav-top a {
+    text-decoration: none;
+    font-size: 20px;
+    margin-left: 40px;
+    display: inline-block;
+    transition: color 0.6s ease, transform 0.4s ease;
+}
+
+.nav-top a:hover {
+    color: #0d6efd;
+    transform: scale(1.1);
+}
+
+.navbar-login-btn {
+    background: linear-gradient(to right, #6d76db, #00d2ff);
+    padding: 6px 12px 12px;
+    color: white;
+    border-radius: 10px;
+}
+
+.navbar-login-btn:hover {
+    color: white !important;
+}
+
+/* Hamburger menu - hidden by default */
+.menu {
+    display: none;
+    flex-direction: column;
+    width: 35px;
+    gap: 6px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.menu div {
+    height: 4px;
+    background: linear-gradient(to right, #3a47d5, #00d2ff);
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+}
+
+.menu:hover,
+.menu div:hover {
+    transform: rotate(360deg);
+}
+
+@media screen and (max-width:900px) {
+    .nav-section {
+        padding: 0 40px;
+    }
+
+    .nav-top a {
+        margin-left: 20px;
+    }
+}
+
+@media screen and (max-width:690px) {
+    .menu {
+        display: flex;
+    }
+
+    .nav-top {
+        display: none;
+        flex-direction: column;
+        background-color: white;
+        border-top: 2px solid lightgray;
+        position: absolute;
+        top: 62px;
+        right: 0;
+        width: 100%;
+    }
+
+    .nav-top.show {
+        display: flex;
+    }
+
+    .nav-top a {
+        text-align: center;
+        padding: 10px;
+        margin: 0;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .nav-top a:nth-last-child(2),
+    .nav-top a:last-child {
+        border-bottom: none;
+    }
+}
+
+@media screen and (max-width:330px) {
+    .nav-section {
+        padding: 0 20px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .logo img {
+        width: 35px;
+    }
+}

@@ -1,0 +1,25 @@
+.inputField-group {
+    width: 90%;
+    justify-self: center;
+}
+
+.inputField-label {
+    display: block;
+    text-align: start;
+    margin-bottom: 4px;
+    font-size: 15px;
+}
+
+.inputField-box {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #ebebeb;
+    outline: none;
+    resize: none;
+}
+
+.inputField-box:focus {
+    border-bottom: 2px solid #00d2ff;
+}

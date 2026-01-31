@@ -1,0 +1,17 @@
+/* Have Question Section (CTA.jsx) */
+.have-question {
+    text-align: center;
+    justify-self: center;
+    margin: 40px 20px 0;
+}
+
+.have-question>i {
+    font-size: 40px;
+    padding: 10px;
+}
+
+.have-question>p {
+    max-width: 600px;
+    padding: 20px 0;
+    color: lightslategray;
+}

@@ -1,0 +1,104 @@
+.my-appointments {
+    padding-top: 100px;
+    width: 90%;
+    justify-self: center;
+}
+
+.my-appointments>h2 {
+    border-bottom: 2px solid #ebebeb;
+    padding-bottom: 6px;
+    font-weight: 500;
+}
+
+.no-appointments {
+    margin-top: 30px;
+    text-align: center;
+    color: #778899;
+    font-weight: 500;
+}
+
+.appointments-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    border-bottom: 2px solid #ebebeb;
+    padding: 15px 0 20px;
+}
+
+.appointment-card {
+    display: flex;
+    gap: 20px;
+}
+
+.appointment-card>img {
+    width: 160px;
+    border-radius: 10px;
+}
+
+.appointment-details {
+    width: 210px;
+    height: fit-content;
+    align-self: center;
+}
+
+.appointment-details>h3 {
+    font-weight: 500;
+    padding-bottom: 6px;
+}
+
+.appointment-details>p {
+    color: #778899;
+    font-size: 14px;
+    padding-bottom: 4px;
+}
+
+/* Cancel Button */
+.cancel-btn {
+    background: linear-gradient(to right, #ffffff, #ffffff);
+    min-width: 145px;
+    color: #696969;
+    font-size: 14px;
+    border: 1px solid #778899;
+}
+
+.cancel-btn:hover {
+    filter: brightness(1);
+}
+
+.cancel-btn.cancelled {
+    color: #ff0000;
+    border: 1px solid #ff0000;
+}
+
+.cancel-btn.completed {
+    color: #00b09b;
+    border: 1px solid #00b09b;
+}
+
+@media screen and (max-width:620px) {
+    .my-appointments>h2 {
+        text-align: center;
+    }
+
+    .appointment-card {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width:420px) {
+    .appointments-container {
+        gap: 0px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .appointment-card {
+        justify-content: center;
+    }
+
+    .appointment-details>h3 {
+        text-align: center;
+    }
+}

@@ -1,0 +1,32 @@
+/* Days Slots Selection */
+.slot-selection {
+    margin-top: 20px;
+}
+
+.slot-selection>p {
+    font-weight: 500;
+    padding-bottom: 10px;
+}
+
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+}
+
+.slot-btn {
+    border: 2px solid #ebebeb;
+    background-color: white;
+    color: lightslategray;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    padding: 10px;
+}
+
+.slot-btn.selected {
+    background-color: #00d0ff20;
+    border-color: #00d0ff20;
+    color: #00a1ff;
+    font-weight: 500;
+}

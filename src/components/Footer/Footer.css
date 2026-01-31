@@ -1,0 +1,119 @@
+.footer-section {
+    margin-top: 60px;
+    padding: 50px 20px;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+    background-color: #202942;
+}
+
+.footer-intro {
+    max-width: 400px;
+}
+
+.footer-intro p {
+    margin-top: 10px;
+    color: lightslategray;
+}
+
+/* ------------------------------------ */
+.nav-bottom a {
+    color: lightslategray;
+    display: block;
+    text-decoration: none;
+    margin: 13px 0;
+    width: fit-content;
+    transition: color 0.4s ease-in-out;
+}
+
+/* ------------------------------------ */
+
+.footer-contact-item {
+    display: flex;
+    gap: 8px;
+    margin: 13px 0;
+    color: lightslategray;
+    align-items: center;
+}
+
+.footer-contact-item i {
+    font-size: 18px;
+    color: lightslategray;
+}
+
+.footer-contact-item a {
+    text-decoration: none;
+    color: lightslategray;
+    transition: color 0.4s ease-in-out;
+}
+
+/* ------------------------------------ */
+
+.social-media-icons a i {
+    color: lightslategray;
+    font-size: 25px;
+    margin-top: 10px;
+    margin-left: 16px;
+    text-align: start;
+    transition: color 0.4s ease-in-out;
+}
+
+/* Shared hover states */
+.nav-bottom a:hover,
+.footer-contact-item a:hover,
+.social-media-icons a i:hover {
+    color: white;
+}
+
+/* ------------------------------------ */
+
+.footer-copyright {
+    background-color: #202942;
+}
+
+.footer-copyright hr {
+    width: 90%;
+    justify-self: center;
+    border: 1px solid lightslategray;
+}
+
+.footer-copyright p {
+    padding: 25px 5px;
+    color: lightslategray;
+    text-align: center;
+    font-size: 12px;
+}
+
+/* ------------------------------------ */
+
+@media screen and (max-width:540px) {
+    .footer-section {
+        display: block;
+        justify-items: center;
+        text-align: center;
+        padding: 50px 10px;
+    }
+
+    .footer-intro {
+        max-width: 500px;
+    }
+
+    .footer-company {
+        margin-top: 30px;
+    }
+
+    .nav-bottom {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .footer-contact-info {
+        text-align: start;
+    }
+
+    .footer-copyright hr {
+        width: 80%;
+    }
+}

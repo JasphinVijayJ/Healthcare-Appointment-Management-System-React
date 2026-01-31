@@ -1,0 +1,162 @@
+/* Doctor Header */
+.doctor-profile-section {
+    padding-top: 100px;
+    width: 85%;
+    justify-self: center;
+}
+
+.doctor-header {
+    justify-self: center;
+    padding: 30px;
+    box-shadow: 0px 0px 20px #ebebeb;
+    border-radius: 15px;
+    display: flex;
+    gap: 50px;
+}
+
+.doctor-header>img {
+    width: 200px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 5px solid #00d0ff20;
+}
+
+.doctor-basic-info {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+    justify-content: center;
+}
+
+.doctor-basic-info>h1 {
+    font-weight: 500;
+}
+
+.doctor-basic-info>p {
+    color: lightslategray;
+}
+
+/* Profile Content */
+.profile-content {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* Left Column */
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* quick-info-section */
+.quick-info-section {
+    padding-top: 20px;
+}
+
+/* Appointment Fee Section */
+.appointment-fee-section>p {
+    font-size: 32px;
+    justify-self: center;
+    padding-top: 10px;
+}
+
+/* Book Button */
+.booking-error {
+    padding-top: 4px;
+}
+
+.book-appointment-btn {
+    display: block;
+    justify-self: center;
+    margin-top: 15px;
+}
+
+.booking-note {
+    background-color: #00d0ff20;
+    padding: 12px;
+    border-radius: 20px;
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* Shared All Styles from above */
+.doctor-experience>span,
+.info-item>span,
+.booking-note>span {
+    padding-left: 10px;
+    color: lightslategray;
+    font-size: 14px;
+}
+
+.doctor-about-section,
+.appointment-fee-section,
+.booking-section {
+    box-shadow: 0px 0px 20px #ebebeb;
+    border-radius: 15px;
+    padding: 20px 30px 30px;
+}
+
+.doctor-about-section>h2,
+.booking-section>h2,
+.appointment-fee-section>h2 {
+    font-weight: 500;
+    border-bottom: 2px solid #ebebeb;
+    padding-bottom: 5px;
+}
+
+.doctor-about-section>p,
+.booking-section>p {
+    color: lightslategray;
+    padding-top: 10px;
+}
+
+@media screen and (max-width:730px) {
+    .doctor-profile-section {
+        width: 90%;
+    }
+
+    .doctor-header {
+        justify-self: auto;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .doctor-basic-info>h1 {
+        font-size: 26px;
+    }
+
+    .profile-content {
+        gap: 20px;
+    }
+
+    .doctor-about-section,
+    .appointment-fee-section,
+    .booking-section {
+        padding: 20px 20px 30px;
+    }
+}
+
+@media screen and (max-width:570px) {
+    .doctor-profile-section {
+        width: 93%;
+    }
+
+    .doctor-header {
+        justify-self: center;
+        text-align: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .doctor-basic-info>h1 {
+        font-size: 24px;
+    }
+
+    .profile-content {
+        grid-template-columns: 1fr;
+    }
+}

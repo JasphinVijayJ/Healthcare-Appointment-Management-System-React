@@ -1,0 +1,117 @@
+/* Doctors-Background Section */
+.our-doctors {
+    position: relative;
+    justify-items: center;
+}
+
+.doctors-background-img {
+    background: linear-gradient(#3c4858b3), url(../../../assets/doctors-intro-image.jpg) no-repeat top center/cover;
+    height: 50vh;
+    width: 100%;
+}
+
+.doctors-intro {
+    position: absolute;
+    top: 200px;
+}
+
+/* Filter Section */
+.filter-container {
+    padding: 50px 20px 0;
+    justify-self: center;
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.dropdown-selected {
+    padding: 20px 40px;
+    width: 100%;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: #00d0ff20;
+    border: 2px solid #00d0ff20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.dropdown-selected>i {
+    transition: transform 0.6s ease;
+}
+
+/* Rotate arrow when dropdown is open */
+.dropdown-selected.open i {
+    transform: rotate(180deg);
+}
+
+.dropdown-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 8px;
+    border: 1px solid #ebebeb;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    position: absolute;
+    background-color: white;
+    left: 10px;
+    right: 10px;
+    width: auto;
+    z-index: 10;
+}
+
+.dropdown-item {
+    padding: 15px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #ebebeb;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item.selected {
+    background-color: #00d0ff20;
+    color: #00a1ff;
+    font-weight: 500;
+}
+
+.dropdown-item:hover {
+    background-color: #00d0ff20;
+}
+
+/* Doctors Section */
+.our-doctors-grid {
+    padding: 20px 100px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.load-more-btn {
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    display: block;
+    justify-self: center;
+    margin-top: 30px;
+}
+
+@media screen and (max-width:1010px) {
+    .our-doctors-grid {
+        padding: 20px 50px 0;
+    }
+}
+
+@media screen and (max-width:500px) {
+    .our-doctors-grid {
+        padding: 20px 10px 0;
+    }
+}

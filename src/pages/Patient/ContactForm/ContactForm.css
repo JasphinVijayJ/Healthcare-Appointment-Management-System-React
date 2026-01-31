@@ -1,0 +1,48 @@
+.form-section {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 50px 30px 0px;
+}
+
+.contact-form {
+    box-shadow: 0px 0px 8px #ebebeb;
+    border-radius: 15px;
+    padding: 20px;
+    padding-bottom: 30px;
+}
+
+.contact-form>h1 {
+    font-weight: 500;
+    padding-bottom: 20px;
+}
+
+.input-group {
+    width: 90%;
+    justify-self: center;
+}
+
+.input-group>textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 16px;
+    border: 2px solid #ebebeb;
+    outline: none;
+    resize: none;
+}
+
+.input-group>textarea:focus {
+    border-bottom: 2px solid #00d2ff;
+}
+
+@media screen and (max-width:400px) {
+    .form-section {
+        padding: 50px 10px 0px;
+    }
+
+    .contact-form {
+        padding: 10px 0px 20px;
+    }
+}

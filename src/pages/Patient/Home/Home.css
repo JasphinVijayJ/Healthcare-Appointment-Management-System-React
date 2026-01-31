@@ -1,0 +1,164 @@
+/* Home-Background Section */
+.home {
+    position: relative;
+    justify-items: center;
+}
+
+.home-background-img {
+    background: linear-gradient(#3c4858b3), url(../../../assets/home-intro-image.jpg) no-repeat top center/cover;
+    height: 70vh;
+    width: 100%;
+}
+
+.intro {
+    position: absolute;
+    top: 200px;
+    text-align: center;
+    margin: 0 20px;
+}
+
+.intro p {
+    max-width: 600px;
+    padding: 20px 0 30px;
+    color: white;
+}
+
+/* Benefits Section */
+.benefits {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+/* Specialties Showcase Section */
+.specialties-showcase {
+    padding: 50px 30px 0;
+    text-align: center;
+}
+
+.specialties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.specialty-card:hover .hover-btn {
+    transform: translateY(-5px);
+}
+
+.hover-btn {
+    transition: all 0.4s ease;
+}
+
+/* How we Works Section */
+.steps-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.steps-card {
+    max-width: 500px;
+    justify-self: center;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.steps-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Shared All Styles from above */
+.how-we-works,
+.benefits-section {
+    margin-top: 50px;
+    padding: 50px 30px;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.how-we-works>p,
+.specialties-showcase>p {
+    color: lightslategray;
+    padding: 10px 0 30px;
+}
+
+.specialty-card,
+.benefit-card {
+    padding: 20px;
+    border: 1px solid #ebebeb;
+    border-radius: 10px;
+    transition: all 0.5s ease;
+}
+
+.specialty-card:hover,
+.benefit-card:hover {
+    transform: translateY(-10px);
+    border-color: #00d2ff;
+    background-color: #00d0ff20;
+}
+
+.steps-card i,
+.specialty-card i,
+.benefit-card i {
+    font-size: 40px;
+    padding: 10px;
+}
+
+.steps-card h3,
+.specialty-card h3,
+.benefit-card h3 {
+    font-weight: 600;
+}
+
+.steps-card p,
+.specialty-card p,
+.benefit-card p {
+    color: lightslategray;
+    padding: 10px;
+}
+
+/* -------------------------------- */
+
+@media screen and (max-width:370px) {
+    .intro {
+        top: 130px;
+    }
+
+    .intro h1 {
+        font-size: 24px;
+    }
+
+    .how-we-works,
+    .benefits-section {
+        padding: 50px 10px;
+    }
+
+    .specialties-showcase {
+        padding: 50px 10px 0;
+    }
+
+    .steps-container,
+    .specialties-grid,
+    .benefits {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .steps-card,
+    .specialty-card,
+    .benefit-card {
+        padding: 10px 0;
+    }
+
+    .steps-card p,
+    .specialty-card p,
+    .benefit-card p {
+        font-size: 14px;
+    }
+}

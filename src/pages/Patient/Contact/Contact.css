@@ -1,0 +1,77 @@
+/* Contact-Background Section */
+.contact-us {
+    position: relative;
+    justify-items: center;
+}
+
+.contact-background-img {
+    background: linear-gradient(#3c4858b3), url(../../../assets/contact-us-intro-image.jpg) no-repeat center center/cover;
+    height: 50vh;
+    width: 100%;
+}
+
+.contact-intro {
+    position: absolute;
+    top: 200px;
+}
+
+/* Contact Section */
+.contact-details {
+    padding-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.contact-item {
+    max-width: 160px;
+}
+
+.contact-item>i {
+    font-size: 40px;
+    padding: 20px;
+}
+
+.contact-item>h3 {
+    font-weight: 500;
+    padding-bottom: 10px;
+}
+
+.contact-item>p {
+    color: lightslategray;
+    font-size: 15px;
+}
+
+.contact-item>a {
+    text-decoration: none;
+    font-size: 15px;
+    color: lightslategray;
+    transition: color 0.4s ease;
+}
+
+.contact-item>a:hover {
+    color: #0d6efd;
+}
+
+/* Map Section */
+.map-container {
+    padding-top: 30px;
+}
+
+/* Shared All Styles from above */
+.contact-info-section,
+.map-section {
+    padding-top: 50px;
+    text-align: center;
+}
+
+.contact-info-section>p,
+.map-section>p {
+    color: lightslategray;
+}
+
+.contact-info-section>h1,
+.map-section>h1 {
+    font-weight: 500;
+}

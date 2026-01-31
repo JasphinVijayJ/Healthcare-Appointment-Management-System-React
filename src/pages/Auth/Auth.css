@@ -1,0 +1,49 @@
+.auth-section {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    height: 90vh;
+    padding: 50px 30px 0px;
+    align-content: center;
+}
+
+.auth-form {
+    border: 2px solid #ebebeb;
+    border-radius: 15px;
+    padding: 20px;
+    padding-bottom: 30px;
+}
+
+.auth-form>h2 {
+    font-weight: 500;
+}
+
+.auth-subtitle {
+    color: lightslategray;
+    padding-bottom: 20px;
+    font-size: 14px;
+}
+
+.auth-btn {
+    width: 50%;
+}
+
+.auth-redirect {
+    color: lightslategray;
+    font-size: 14px;
+}
+
+.auth-redirect>a {
+    font-weight: 500;
+    color: transparent;
+}
+
+@media screen and (max-width:400px) {
+    .auth-section {
+        padding: 50px 10px 0px;
+    }
+
+    .auth-form {
+        padding: 10px 0px 20px;
+    }
+}
