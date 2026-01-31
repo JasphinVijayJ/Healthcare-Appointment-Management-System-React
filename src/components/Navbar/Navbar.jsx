@@ -55,7 +55,7 @@ function Navbar() {
     return (
         <section className='nav-section'>
             <Link to="/" className="logo gradient-highlight">
-                <img src="/logo.png" alt="Website Logo" />
+                <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Website Logo" />
                 HealthCare
             </Link>
 
