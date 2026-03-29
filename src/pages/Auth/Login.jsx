@@ -84,9 +84,12 @@ function Login() {
             }
             console.log(fromBackEnd);
 
-            // Save JWT token + role in localStorage
-            localStorage.setItem("token", fromBackEnd.token);
+            // Save JWT id + email + role + token in localStorage
+            localStorage.setItem("id", fromBackEnd.id);
+            localStorage.setItem("email", fromBackEnd.email);
             localStorage.setItem("role", fromBackEnd.role);
+            localStorage.setItem("token", fromBackEnd.token);
+
 
             if (fromBackEnd.role === "ADMIN") navigate("/admin/dashboard");
             else if (fromBackEnd.role === "DOCTOR") navigate("/doctor/dashboard");

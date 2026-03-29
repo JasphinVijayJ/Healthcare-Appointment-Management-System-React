@@ -6,12 +6,14 @@ import SlotSelector from '../../../components/common/SlotSelector/SlotSelector';
 import PopupAlert from "../../../components/common/PopupAlert/PopupAlert";
 import { demoDays, demoTimeSlots, DOCTORS } from "../../../data/doctorsData";
 import { formatDateToDayLabel, formatTimeToHHMM } from "../../../utils/dateFormatter";
+import { useLogout } from "../../../utils/useLogout";
 import './DoctorProfile.css'
 
 function DoctorProfile() {
 
     const { doctorId } = useParams();   // Get doctor ID from URL
     const navigate = useNavigate();
+    const handleLogout = useLogout();
 
     const [doctor, setDoctor] = useState(null);
     const [availableDays, setAvailableDays] = useState([]);
@@ -115,7 +117,13 @@ function DoctorProfile() {
 
         try {
             setLoading(true);
-            const patientId = 12;
+
+            const patientId = localStorage.getItem("id");
+
+            if (!patientId) {
+                handleLogout();
+                return;
+            }
 
             const response = await fetch("http://localhost:8080/appointments", {
                 method: "POST",

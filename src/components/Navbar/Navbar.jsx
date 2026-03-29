@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom'
+import { useLogout } from '../../utils/useLogout';
 import './Navbar.css'
 
 const navLinks = [
@@ -12,7 +13,13 @@ const navLinks = [
 function Navbar() {
 
     const location = useLocation(); // Get current URL path
+    const handleLogout = useLogout();
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userEmail, setUserEmail] = useState('');
+    const [patientId, setPatientId] = useState(null);
 
     const toggleMenu = useCallback(() => {
         setIsMenuOpen(prev => !prev);
@@ -20,37 +27,66 @@ function Navbar() {
 
     const closeMenu = useCallback(() => {
         setIsMenuOpen(false);
+        setIsDropdownOpen(false);
     }, []);
 
-    // Close menu on escape key
+
+    // Handle escape key for both menu and dropdown
     useEffect(() => {
         const handleEscape = (e) => {
-            if (e.key === 'Escape') closeMenu();
+            if (e.key !== 'Escape') return;
+
+            if (isMenuOpen) closeMenu();
+            if (isDropdownOpen) setIsDropdownOpen(false);
         };
 
-        if (isMenuOpen) {
+        if (isMenuOpen || isDropdownOpen) {
             document.addEventListener('keydown', handleEscape);
-            document.body.style.overflow = 'hidden';    // Prevent background scroll
+            if (isMenuOpen) document.body.style.overflow = 'hidden';    // Prevent background scroll when menu is open
         }
-
         return () => {
             document.removeEventListener('keydown', handleEscape);
             document.body.style.overflow = 'unset';
         };
-    }, [isMenuOpen, closeMenu]);
+    }, [isMenuOpen, isDropdownOpen, closeMenu]);
 
+
+
+    // Handle all click outside events in one effect
     useEffect(() => {
-        if (!isMenuOpen) return;
-
         const handleClickOutside = (e) => {
-            if (!e.target.closest('.nav-top') && !e.target.closest('.menu')) {
+            // Close mobile menu
+            if (isMenuOpen && !e.target.closest('.nav-top') && !e.target.closest('.menu')) {
                 closeMenu();
+            }
+
+            // Close profile dropdown
+            if (isDropdownOpen && !e.target.closest('.profile-menu')) {
+                setIsDropdownOpen(false);
             }
         };
 
-        document.addEventListener('click', handleClickOutside);
-        return () => document.removeEventListener('click', handleClickOutside);
-    }, [isMenuOpen, closeMenu]);
+        // Only add listener if either menu or dropdown is open
+        if (isMenuOpen || isDropdownOpen) {
+            document.addEventListener('click', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [isMenuOpen, isDropdownOpen, closeMenu]);
+
+
+    // Check login status
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        setIsLoggedIn(!!token);
+
+        setUserEmail(localStorage.getItem("email"));
+
+        setPatientId(localStorage.getItem("id"));
+    }, [location]);
+
 
     return (
         <section className='nav-section'>
@@ -59,26 +95,52 @@ function Navbar() {
                 HealthCare
             </Link>
 
-            {/* Hamburger Menu */}
-            <div className='menu' onClick={toggleMenu}>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
+            <section className='nav-right'>
+                {/* Hamburger Menu */}
+                <div className='menu' onClick={toggleMenu}>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
 
-            <nav className={`nav-top ${isMenuOpen ? 'show' : ''}`}>
-                {navLinks.map((link) => (
-                    <Link
-                        key={link.name}
-                        to={link.path}
-                        style={{ color: location.pathname === link.path ? '#0d6efd' : '' }}
-                        onClick={closeMenu}
-                    >
-                        {link.name}
-                    </Link>
-                ))}
-                <Link className='navbar-login-btn' to='/login' onClick={closeMenu}>Login</Link>
-            </nav>
+                <nav className={`nav-top ${isMenuOpen ? 'show' : ''}`}>
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.name}
+                            to={link.path}
+                            style={{ color: location.pathname === link.path ? '#0d6efd' : '' }}
+                            onClick={closeMenu}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                </nav>
+
+                {!isLoggedIn ? (
+                    <Link className='navbar-login-btn' to='/login' onClick={closeMenu}>Login</Link>
+                ) : (
+                    <div className="profile-menu">
+                        <button
+                            className="profile-btn"
+                            onClick={() => setIsDropdownOpen(prev => !prev)}
+                        >
+                            <div className="user-avatar">
+                                {userEmail ? userEmail.charAt(0).toUpperCase() : '?'}
+                            </div>
+                        </button>
+
+                        {isDropdownOpen && (
+                            <div className="dropdown">
+                                <Link to="/my-profile" onClick={closeMenu}>My Profile</Link>
+
+                                <Link to={`/my-appointments/${patientId}`} onClick={closeMenu}>My Appointments</Link>
+
+                                <button className='logout-btn' onClick={handleLogout}>Logout</button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </section>
         </section>
     )
 }
