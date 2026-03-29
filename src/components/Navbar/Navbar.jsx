@@ -19,7 +19,6 @@ function Navbar() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userEmail, setUserEmail] = useState('');
-    const [patientId, setPatientId] = useState(null);
 
     const toggleMenu = useCallback(() => {
         setIsMenuOpen(prev => !prev);
@@ -83,8 +82,6 @@ function Navbar() {
         setIsLoggedIn(!!token);
 
         setUserEmail(localStorage.getItem("email"));
-
-        setPatientId(localStorage.getItem("id"));
     }, [location]);
 
 
@@ -133,7 +130,7 @@ function Navbar() {
                             <div className="dropdown">
                                 <Link to="/my-profile" onClick={closeMenu}>My Profile</Link>
 
-                                <Link to={`/my-appointments/${patientId}`} onClick={closeMenu}>My Appointments</Link>
+                                <Link to={`/my-appointments`} onClick={closeMenu}>My Appointments</Link>
 
                                 <button className='logout-btn' onClick={handleLogout}>Logout</button>
                             </div>

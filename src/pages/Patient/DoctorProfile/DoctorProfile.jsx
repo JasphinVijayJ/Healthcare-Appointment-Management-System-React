@@ -6,14 +6,12 @@ import SlotSelector from '../../../components/common/SlotSelector/SlotSelector';
 import PopupAlert from "../../../components/common/PopupAlert/PopupAlert";
 import { demoDays, demoTimeSlots, DOCTORS } from "../../../data/doctorsData";
 import { formatDateToDayLabel, formatTimeToHHMM } from "../../../utils/dateFormatter";
-import { useLogout } from "../../../utils/useLogout";
 import './DoctorProfile.css'
 
 function DoctorProfile() {
 
     const { doctorId } = useParams();   // Get doctor ID from URL
     const navigate = useNavigate();
-    const handleLogout = useLogout();
 
     const [doctor, setDoctor] = useState(null);
     const [availableDays, setAvailableDays] = useState([]);
@@ -121,7 +119,9 @@ function DoctorProfile() {
             const patientId = localStorage.getItem("id");
 
             if (!patientId) {
-                handleLogout();
+                console.error("Patient ID not found in localStorage. User might not be logged in.");
+                setBookingError("Patient ID not found. User might not be logged in.");
+
                 return;
             }
 
@@ -149,7 +149,7 @@ function DoctorProfile() {
             // Auto-hide popup after 2.2s and navigate
             setTimeout(() => {
                 setPopup({ show: false, message: "", type: "success" });
-                navigate(`/my-appointments/${patientId}`);
+                navigate(`/my-appointments`);
             }, 2200);
         } catch (error) {
             console.error(error);

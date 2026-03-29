@@ -34,7 +34,7 @@ function App() {
         <Route path='/register' element={<Register />} />
 
         {/* Patient-only routes */}
-        <Route path='/my-appointments/:patientId' element={
+        <Route path='/my-appointments' element={
           <ProtectedRoute allowedRoles={['PATIENT']}>
             <MyAppointments />
           </ProtectedRoute>} />

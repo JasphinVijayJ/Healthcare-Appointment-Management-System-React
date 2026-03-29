@@ -4,7 +4,11 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 
 createRoot(document.getElementById('root')).render(
-    <BrowserRouter basename='/Healthcare-Appointment-Management-System-React'>
-      <App />
-    </BrowserRouter>
+  <BrowserRouter basename={
+    import.meta.env.PROD
+      ? '/Healthcare-Appointment-Management-System-React'
+      : '/'
+  }>
+    <App />
+  </BrowserRouter>
 )

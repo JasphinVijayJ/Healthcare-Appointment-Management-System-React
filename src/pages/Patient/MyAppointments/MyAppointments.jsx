@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { APPOINTMENTS } from "../../../data/appointmentsData";
 import { formatTimeToHHMM, getCancelButtonText, isPastAppointment } from "../../../utils/dateFormatter";
 import "./MyAppointments.css"
 
 function MyAppointments() {
 
-    const { patientId } = useParams();   // Get patient ID from URL
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [cancelLoading, setCancelLoading] = useState({});
@@ -15,6 +12,15 @@ function MyAppointments() {
     useEffect(() => {
         document.title = "HAMS | My Appointments";
     }, []);
+
+    const patientId = localStorage.getItem("id");
+
+    if (!patientId) {
+        console.error("Patient ID not found in localStorage. User might not be logged in.");
+        setBookingError("Patient ID not found. User might not be logged in.");
+
+        return;
+    }
 
     useEffect(() => {
         const fetchMyAppointments = async () => {
@@ -34,8 +40,7 @@ function MyAppointments() {
                 console.log(fromBackEnd);
             } catch (error) {
                 console.log(error);
-                setAppointments(APPOINTMENTS.filter(a => a.patientId === parseInt(patientId)));
-                setError("Unable to load appointments. Showing offline data.");
+                setError("Error: Server error. Please try again later.");
             } finally {
                 setLoading(false);
             }
