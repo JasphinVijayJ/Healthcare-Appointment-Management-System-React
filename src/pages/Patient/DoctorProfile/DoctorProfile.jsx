@@ -125,9 +125,10 @@ function DoctorProfile() {
                 return;
             }
 
-            const response = await fetch("http://localhost:8080/appointments", {
+            const response = await fetch("http://localhost:8080/appointments/book", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", },
+                credentials: "include", // required to send/receive cookies
                 body: JSON.stringify({
                     doctorId: doctor.id,
                     patientId: patientId,

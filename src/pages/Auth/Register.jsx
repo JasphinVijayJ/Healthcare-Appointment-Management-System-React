@@ -4,10 +4,10 @@ import InputField from '../../components/common/InputField/InputField';
 import { Link, useNavigate } from 'react-router-dom';
 
 const inputFields = [
-    { label: "Full Name", name: "name", type: "text", placeholder: "Enter your Name" },
-    { label: "Email", name: "email", type: "email", placeholder: "Enter your Email" },
-    { label: "Password", name: "password", type: "password", placeholder: "Enter your Password" },
-    { label: "Confirm Password", name: "confirmPassword", type: "password", placeholder: "Enter your Confirm Password" },
+    { label: "Full Name", name: "name", type: "text", placeholder: "Enter your Name", maxLength: 50 },
+    { label: "Email", name: "email", type: "email", placeholder: "Enter your Email", maxLength: 50 },
+    { label: "Password", name: "password", type: "password", placeholder: "Enter your Password", maxLength: 20 },
+    { label: "Confirm Password", name: "confirmPassword", type: "password", placeholder: "Enter your Confirm Password", maxLength: 20 },
 ];
 
 // Email regex pattern
@@ -127,7 +127,7 @@ function Register() {
                 <h2 className='gradient-highlight'>Create Account</h2>
                 <p className='auth-subtitle'>Please sign up to book appointment</p>
 
-                {inputFields.map(({ label, name, type, placeholder }) => (
+                {inputFields.map(({ label, name, type, placeholder, maxLength }) => (
                     <InputField
                         key={name}
                         label={label}
@@ -137,6 +137,7 @@ function Register() {
                         placeholder={placeholder}
                         onChange={handleChange}
                         error={errors[name]}
+                        maxLength={maxLength}
                     />
                 ))}
 

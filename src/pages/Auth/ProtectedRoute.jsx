@@ -3,9 +3,8 @@ import { Navigate } from "react-router-dom";
 // Role-Based Access Control (RBAC)
 function ProtectedRoute({ children, allowedRoles }) {
 
-    const token = localStorage.getItem("token");
     const userRole = localStorage.getItem("role");
-    const isLoggedIn = !!token;
+    const isLoggedIn = !!localStorage.getItem("email") && !!userRole;
 
     // Not logged in - redirect to login
     if (!isLoggedIn) {

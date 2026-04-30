@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom'
-import { useLogout } from '../../utils/useLogout';
+import { useLogout } from '../../pages/Auth/useLogout';
+import PopupAlert from '../common/PopupAlert/PopupAlert';
 import './Navbar.css'
 
 const navLinks = [
@@ -13,7 +14,7 @@ const navLinks = [
 function Navbar() {
 
     const location = useLocation(); // Get current URL path
-    const handleLogout = useLogout();
+    const { logout, popup } = useLogout();
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -78,15 +79,22 @@ function Navbar() {
 
     // Check login status
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        setIsLoggedIn(!!token);
+        const email = localStorage.getItem("email");
+        const role  = localStorage.getItem("role");
 
-        setUserEmail(localStorage.getItem("email"));
+        setIsLoggedIn(!!email && !!role);
+        setUserEmail(email);
     }, [location]);
 
 
     return (
         <section className='nav-section'>
+            {/* PopupAlert.jsx */}
+            <PopupAlert
+                show={popup.show}
+                message={popup.message}
+                type={popup.type}
+            />
             <Link to="/" className="logo gradient-highlight">
                 <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Website Logo" />
                 HealthCare
@@ -128,11 +136,11 @@ function Navbar() {
 
                         {isDropdownOpen && (
                             <div className="dropdown">
-                                <Link to="/my-profile" onClick={closeMenu}>My Profile</Link>
+                                <Link to="/my-profile" style={{ color: location.pathname === "/my-profile" ? '#0d6efd' : '' }} onClick={closeMenu}>My Profile</Link>
 
-                                <Link to={`/my-appointments`} onClick={closeMenu}>My Appointments</Link>
+                                <Link to={`/my-appointments`} style={{ color: location.pathname === "/my-appointments" ? '#0d6efd' : '' }} onClick={closeMenu}>My Appointments</Link>
 
-                                <button className='logout-btn' onClick={handleLogout}>Logout</button>
+                                <button className='logout-btn' onClick={() => { logout(); closeMenu(); }}>Logout</button>
                             </div>
                         )}
                     </div>

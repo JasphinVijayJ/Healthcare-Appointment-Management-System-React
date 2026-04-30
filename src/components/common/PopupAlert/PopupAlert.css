@@ -13,12 +13,9 @@
 
 .popup-alert {
     background: white;
-    padding: 25px;
+    padding: 30px;
     border-radius: 10px;
-    min-width: 280px;
-    display: flex;
-    gap: 15px;
-    align-items: center;
+    width: 400px;
     animation: popupSlide 0.6s ease;
 }
 
@@ -39,25 +36,26 @@
 }
 
 .popup-alert.success {
-    border-left: 4px solid #22c55e;
-    border-right: 4px solid #22c55e;
+    border-left: 6px solid #22c55e;
+    border-right: 6px solid #22c55e;
 }
 
 .popup-alert.error {
-    border-left: 4px solid #ef4444;
-    border-right: 4px solid #ef4444;
+    border-left: 6px solid #ef4444;
+    border-right: 6px solid #ef4444;
 }
 
 .popup-icon {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
+    justify-self: center;
     align-items: center;
     justify-content: center;
     font-weight: bold;
     color: white;
-    font-size: 25px;
+    font-size: 30px;
 }
 
 .popup-alert.success .popup-icon {
@@ -69,6 +67,9 @@
 }
 
 .popup-message {
+    justify-self: center;
+    text-align: ;
+    padding-top: 20px;
     font-weight: 500;
     color: #778899;
 }

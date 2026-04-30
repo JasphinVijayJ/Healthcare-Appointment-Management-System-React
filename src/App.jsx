@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import './App.css'
 
 import Navbar from './components/Navbar/Navbar'
@@ -13,7 +13,7 @@ import Contact from './pages/Patient/Contact/Contact'
 import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import MyAppointments from './pages/Patient/MyAppointments/MyAppointments'
-import ProtectedRoute from './utils/ProtectedRoute'
+import ProtectedRoute from './pages/Auth/ProtectedRoute'
 
 function App() {
 
@@ -30,8 +30,9 @@ function App() {
         <Route path='/doctors' element={<Doctor />} />
         <Route path='/doctor-profile/:doctorId' element={<DoctorProfile />} />
         <Route path='/contact' element={<Contact />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
+        
+        <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path='/register' element={<PublicRoute><Register /></PublicRoute>} />
 
         {/* Patient-only routes */}
         <Route path='/my-appointments' element={
@@ -47,3 +48,19 @@ function App() {
 }
 
 export default App
+
+
+// Redirect logged-in users away from login/register pages
+function PublicRoute({ children }) {
+
+  const email = localStorage.getItem('email');
+  const role = localStorage.getItem('role');
+
+  if (email && role) {
+    if (role === 'ADMIN') return <Navigate to="/admin/dashboard" replace />
+    if (role === 'DOCTOR') return <Navigate to="/doctor/dashboard" replace />
+    return <Navigate to="/" replace />
+  }
+
+  return children
+}

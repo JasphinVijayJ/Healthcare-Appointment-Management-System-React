@@ -68,6 +68,7 @@ function Login() {
             const response = await fetch("http://localhost:8080/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include", // required to send/receive cookies
                 body: JSON.stringify({
                     email: formData.email.trim(),
                     password: formData.password.trim(),
@@ -84,11 +85,10 @@ function Login() {
             }
             console.log(fromBackEnd);
 
-            // Save JWT id + email + role + token in localStorage
+            // Save JWT id + email + role in localStorage
             localStorage.setItem("id", fromBackEnd.id);
             localStorage.setItem("email", fromBackEnd.email);
             localStorage.setItem("role", fromBackEnd.role);
-            localStorage.setItem("token", fromBackEnd.token);
 
 
             if (fromBackEnd.role === "ADMIN") navigate("/admin/dashboard");
@@ -119,6 +119,7 @@ function Login() {
                     placeholder="Enter your email"
                     onChange={handleChange}
                     error={errors.email}
+                    maxLength={50}
                 />
 
                 <InputField
@@ -129,6 +130,7 @@ function Login() {
                     placeholder="Enter your password"
                     onChange={handleChange}
                     error={errors.password}
+                    maxLength={20}
                 />
 
                 {/* Button and Error (<p>) and Link */}

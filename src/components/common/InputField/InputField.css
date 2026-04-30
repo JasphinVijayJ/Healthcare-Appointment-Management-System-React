@@ -10,6 +10,22 @@
     font-size: 15px;
 }
 
+.inputField-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputField-eye-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
 .inputField-box {
     box-sizing: border-box;
     width: 100%;

@@ -25,7 +25,11 @@ function MyAppointments() {
     useEffect(() => {
         const fetchMyAppointments = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/appointments/patient/${patientId}`);
+                const response = await fetch(`http://localhost:8080/appointments/patient/${patientId}`,
+                    {
+                        credentials: "include", // required to send/receive cookies
+                    }
+                );
 
                 const fromBackEnd = await response.json();
 
@@ -54,7 +58,11 @@ function MyAppointments() {
 
         try {
             setCancelLoading(prev => ({ ...prev, [appointmentId]: true }));
-            const response = await fetch(`http://localhost:8080/appointments/${appointmentId}/cancel?patientId=${patientId}`, { method: "PUT" });
+            const response = await fetch(`http://localhost:8080/appointments/${appointmentId}/cancel?patientId=${patientId}`, 
+                { 
+                    method: "PUT",
+                    credentials: "include", // required to send/receive cookies
+                 });
 
             const fromBackEnd = await response.json();
 
