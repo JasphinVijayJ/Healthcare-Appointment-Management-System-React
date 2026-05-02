@@ -14,6 +14,7 @@ import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import MyAppointments from './pages/Patient/MyAppointments/MyAppointments'
 import ProtectedRoute from './pages/Auth/ProtectedRoute'
+import MyProfile from './pages/Patient/MyProfile/MyProfile'
 
 function App() {
 
@@ -30,11 +31,16 @@ function App() {
         <Route path='/doctors' element={<Doctor />} />
         <Route path='/doctor-profile/:doctorId' element={<DoctorProfile />} />
         <Route path='/contact' element={<Contact />} />
-        
+
         <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
         <Route path='/register' element={<PublicRoute><Register /></PublicRoute>} />
 
         {/* Patient-only routes */}
+        <Route path='/my-profile' element={
+          <ProtectedRoute allowedRoles={['PATIENT']}>
+            <MyProfile />
+          </ProtectedRoute>} />
+
         <Route path='/my-appointments' element={
           <ProtectedRoute allowedRoles={['PATIENT']}>
             <MyAppointments />

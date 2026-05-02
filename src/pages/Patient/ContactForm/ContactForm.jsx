@@ -4,9 +4,9 @@ import PopupAlert from '../../../components/common/PopupAlert/PopupAlert';
 import InputField from '../../../components/common/InputField/InputField';
 
 const inputFields = [
-    { name: "name", type: "text", placeholder: "Your Name" },
-    { name: "email", type: "email", placeholder: "Your Email" },
-    { name: "subject", type: "text", placeholder: "Your Subject" },
+    { name: "name", type: "text", placeholder: "Your Name", maxLength: 50 },
+    { name: "email", type: "email", placeholder: "Your Email", maxLength: 50 },
+    { name: "subject", type: "text", placeholder: "Your Subject", maxLength: 100 },
 ];
 
 // Email regex pattern
@@ -77,7 +77,7 @@ function ContactForm() {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:8080/contact-form", {
+            const response = await fetch("http://localhost:8080/utility/contact-form", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -131,7 +131,7 @@ function ContactForm() {
                 {/* Popup Alert Component */}
                 <PopupAlert show={popupBox.show} message={popupBox.message} type={popupBox.type} />
 
-                {inputFields.map(({ name, type, placeholder }) => (
+                {inputFields.map(({ name, type, placeholder, maxLength }) => (
                     <InputField
                         key={name}
                         type={type}
@@ -140,11 +140,12 @@ function ContactForm() {
                         placeholder={placeholder}
                         onChange={handleChange}
                         error={errors[name]}
+                        maxLength={maxLength}
                     />
                 ))}
 
                 <div className='input-group'>
-                    <textarea id="message" rows="3" name='message' value={formData.message} onChange={handleChange} placeholder="Your Message"></textarea>
+                    <textarea id="message" rows="3" name='message' value={formData.message} onChange={handleChange} placeholder="Your Message" maxLength={300}></textarea>
                     <small className='error-msg'>{errors.message}</small>
                 </div>
 
