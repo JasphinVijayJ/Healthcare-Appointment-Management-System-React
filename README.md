@@ -20,7 +20,7 @@ A **full-stack** web application for booking and managing healthcare appointment
 - 🗓️ **Appointment Management**: Book, view, and cancel appointments
 - 👨‍⚕️ **Doctor Management**: Admins register doctors; users view profiles and availability
 - 📧 **Email Notifications**: Confirmation for appointments and contact forms
-- ☁️ **Cloudinary Integration**: Doctor profile images
+- ☁️ **Cloudinary Integration**: Patient, Doctor profile images
 - 🛡️ **Role-based Access**: Admin, Doctor, and Patient roles
 
 ---
@@ -109,13 +109,18 @@ npm run deploy
 - `POST   /auth/register` — Register patient
 - `POST   /auth/admin/register-doctor` — Register doctor (admin only)
 - `POST   /auth/login` — Login
-- `POST   /appointments` — Book appointment
+- `POST   /auth/logout` — Logout and clear session cookie
+- `GET    /auth/check` — Verify current session status
+- `POST   /appointments/book` — Book appointment
 - `GET    /appointments/patient/{patientId}` — View patient appointments
 - `PUT    /appointments/{appointmentId}/cancel` — Cancel appointment
 - `GET    /doctors/list` — List all doctors
 - `GET    /doctors/{id}` — Doctor profile
 - `GET    /doctors/{doctorId}/availability` — Doctor availability
-- `POST   /contact-form` — Send contact message
+- `GET    /patients/{patientId}` — Get patient profile
+- `PUT    /patients/updateProfile/{patientId}` — Update patient profile
+- `POST   /utility/upload-profile-image` — Upload patient profile image
+- `POST   /utility/contact-form` — Send contact message
 
 ---
 

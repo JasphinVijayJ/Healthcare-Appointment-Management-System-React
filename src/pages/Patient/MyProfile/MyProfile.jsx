@@ -153,7 +153,7 @@ function MyProfile() {
         setSaving(true);
 
         try {
-            const response = await fetch(`http://localhost:8080/patients/${patientId}`,
+            const response = await fetch(`http://localhost:8080/patients/updateProfile/${patientId}`,
                 {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },

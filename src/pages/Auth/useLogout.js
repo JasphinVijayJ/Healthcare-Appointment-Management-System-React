@@ -43,7 +43,7 @@ export const useLogout = () => {
     }, [navigate]);
 
 
-    // Auto Logout (ping backend every 5 seconds)
+    // Auto Logout (ping backend every 1 minute)
     useEffect(() => {
 
         // Only start pinging if user is logged in
@@ -89,7 +89,7 @@ export const useLogout = () => {
 
         checkAutoLogout(); // run immediately on mount
 
-        intervalRef.current = setInterval(checkAutoLogout, 5000); // check every 5 seconds
+        intervalRef.current = setInterval(checkAutoLogout, 60000); // check every 1 minute
         return () => clearInterval(intervalRef.current);          // cleanup on unmount
     }, [navigate]);
 
