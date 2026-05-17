@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import DoctorAbout from "./DoctorAbout";
 import SlotSelector from '../../../components/common/SlotSelector/SlotSelector';
 import PopupAlert from "../../../components/common/PopupAlert/PopupAlert";
-import { demoDays, demoTimeSlots, DOCTORS } from "../../../data/doctorsData";
+import { demoDays, demoTimeSlots, DOCTORS } from "../../../utils/doctorsData";
 import { formatDateToDayLabel, formatTimeToHHMM } from "../../../utils/dateFormatter";
 import './DoctorProfile.css'
 
@@ -116,22 +116,12 @@ function DoctorProfile() {
         try {
             setLoading(true);
 
-            const patientId = localStorage.getItem("id");
-
-            if (!patientId) {
-                console.error("Patient ID not found in localStorage. User might not be logged in.");
-                setBookingError("Patient ID not found. User might not be logged in.");
-
-                return;
-            }
-
             const response = await fetch("http://localhost:8080/appointments/book", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", },
                 credentials: "include", // required to send/receive cookies
                 body: JSON.stringify({
                     doctorId: doctor.id,
-                    patientId: patientId,
                     appointmentDate: selectedDayObject.rawDate,
                     appointmentTime: selectedTime
                 }),

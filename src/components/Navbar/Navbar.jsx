@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom'
 import { useLogout } from '../../pages/Auth/useLogout';
-import PopupAlert from '../common/PopupAlert/PopupAlert';
 import './Navbar.css'
 
 const navLinks = [
@@ -14,7 +13,7 @@ const navLinks = [
 function Navbar() {
 
     const location = useLocation(); // Get current URL path
-    const { logout, popup } = useLogout();
+    const { logout } = useLogout();
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -89,12 +88,7 @@ function Navbar() {
 
     return (
         <section className='nav-section'>
-            {/* PopupAlert.jsx */}
-            <PopupAlert
-                show={popup.show}
-                message={popup.message}
-                type={popup.type}
-            />
+            
             <Link to="/" className="logo gradient-highlight">
                 <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Website Logo" />
                 HealthCare

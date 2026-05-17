@@ -55,16 +55,79 @@ export const isPastAppointment = (date, time) => {
     return false;
 };
 
-export const getCancelButtonText = (status, isExpired) => {
 
+export const getButtonText = (status, isExpired) => {
+
+    if (status === "BOOKED" && isExpired) {
+        return "Expired";
+    }
+    
     switch (status) {
+        case "BOOKED":
+        return "Cancel Appointment";
+
         case "CANCELLED":
-            return "Appointment Cancelled";
+            return "Cancelled";
 
         case "COMPLETED":
             return "Completed";
 
+        case "REJECTED":
+            return "Rejected";
+
         default:
-            return isExpired ? "Expired" : "Cancel Appointment";
+            return "Unavailable !!";
     }
+};
+
+
+export const formatTimeToAMPM = (timeString) => {
+
+    // Split backend time string by ":"
+    // Example input: "09:00:00"
+    // Result: ["09", "00", "00"]
+    const [hours, minutes] = timeString.split(":");
+
+    // Create a new Date object (today’s date used internally)
+    const date = new Date();
+
+    // Set hours from backend value
+    date.setHours(hours);
+
+    // Set minutes from backend value
+    date.setMinutes(minutes);
+
+    // Convert Date object into AM/PM format
+    const formattedTime = date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    });
+
+    // Example output: "09:00 AM"
+    return formattedTime;
+};
+
+
+export const formatDateToLong = (dateString) => {
+
+    // Convert backend string (YYYY-MM-DD) into JavaScript Date object
+    // Example input: "2026-05-10"
+    // Result: Sun May 10 2026 00:00:00 GMT...
+    const date = new Date(dateString);
+
+    // Convert Date object into readable format
+    // weekday: not included
+    // day: 2-digit number (10)
+    // month: short name (May → May / Jan → Jan)
+    // year: full year (2026)
+    const formattedDate = date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",   // 👈 KEY CHANGE: gives 3-letter month (Jan, Feb, Mar...)
+        year: "numeric",
+    });
+
+    // Return final UI string
+    // Example output: "10 May 2026"
+    return formattedDate;
 };

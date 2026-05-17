@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { formatTimeToHHMM, getCancelButtonText, isPastAppointment } from "../../../utils/dateFormatter";
+import { formatTimeToHHMM, getButtonText, isPastAppointment } from "../../../utils/dateFormatter";
 import "./MyAppointments.css"
 
 function MyAppointments() {
@@ -9,48 +9,41 @@ function MyAppointments() {
     const [cancelLoading, setCancelLoading] = useState({});
     const [error, setError] = useState("");
 
+
     useEffect(() => {
         document.title = "HAMS | My Appointments";
+
+        fetchMyAppointments();
     }, []);
 
-    const patientId = localStorage.getItem("id");
 
-    if (!patientId) {
-        console.error("Patient ID not found in localStorage. User might not be logged in.");
-        setBookingError("Patient ID not found. User might not be logged in.");
-
-        return;
-    }
-
-    useEffect(() => {
-        const fetchMyAppointments = async () => {
-            try {
-                const response = await fetch(`http://localhost:8080/appointments/patient/${patientId}`,
-                    {
-                        credentials: "include", // required to send/receive cookies
-                    }
-                );
-
-                const fromBackEnd = await response.json();
-
-                if (!response.ok) {
-                    // Backend validation failed → show exact error
-                    setError(fromBackEnd.message);
-                    console.log(fromBackEnd);
-                    return;
+    const fetchMyAppointments = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/appointments/my-appointments`,
+                {
+                    credentials: "include", // required to send/receive cookies
                 }
+            );
 
-                setAppointments(fromBackEnd);
+            const fromBackEnd = await response.json();
+
+            if (!response.ok) {
+                // Backend validation failed → show exact error
+                setError(fromBackEnd.message);
                 console.log(fromBackEnd);
-            } catch (error) {
-                console.log(error);
-                setError("Error: Server error. Please try again later.");
-            } finally {
-                setLoading(false);
+                return;
             }
-        };
-        fetchMyAppointments();
-    }, [patientId]);
+
+            setAppointments(fromBackEnd);
+            console.log(fromBackEnd);
+        } catch (error) {
+            console.log(error);
+            setError("Error: Server error. Please try again later.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     const handleCancelAppointment = async (appointmentId) => {
         // prevent double click
@@ -58,11 +51,12 @@ function MyAppointments() {
 
         try {
             setCancelLoading(prev => ({ ...prev, [appointmentId]: true }));
-            const response = await fetch(`http://localhost:8080/appointments/${appointmentId}/cancel?patientId=${patientId}`, 
-                { 
+            
+            const response = await fetch(`http://localhost:8080/appointments/${appointmentId}/cancel`,
+                {
                     method: "PUT",
                     credentials: "include", // required to send/receive cookies
-                 });
+                });
 
             const fromBackEnd = await response.json();
 
@@ -88,6 +82,7 @@ function MyAppointments() {
         }
     };
 
+    
     return (
         <section className="my-appointments">
             <h2 className="gradient-highlight">My Appointments</h2>
@@ -120,21 +115,17 @@ function MyAppointments() {
                             </div>
 
                             <button
-                                className={`btn-1 btn-2 cancel-btn 
-                                    ${app.status === "CANCELLED" ? "cancelled" : ""} 
-                                    ${app.status === "COMPLETED" ? "completed" : ""}
-                                `}
+                                className={`btn-1 btn-2 cancel-btn ${app.status.toLowerCase()} ${(app.status === "BOOKED" && isExpired) ? "expired" : ""}`}
                                 onClick={() => handleCancelAppointment(app.appointmentId)}
                                 disabled={
                                     cancelLoading[app.appointmentId] ||
-                                    app.status === "CANCELLED" ||
-                                    app.status === "COMPLETED" ||
+                                    app.status !== "BOOKED" ||
                                     isExpired
                                 }
                             >
                                 {cancelLoading[app.appointmentId]
                                     ? "Cancelling..."
-                                    : getCancelButtonText(app.status, isExpired)}
+                                    : getButtonText(app.status, isExpired)}
                             </button>
                         </div>
                     );

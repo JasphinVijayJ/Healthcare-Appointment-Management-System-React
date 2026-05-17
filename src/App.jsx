@@ -13,60 +13,81 @@ import Contact from './pages/Patient/Contact/Contact'
 import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import MyAppointments from './pages/Patient/MyAppointments/MyAppointments'
-import ProtectedRoute from './pages/Auth/ProtectedRoute'
 import MyProfile from './pages/Patient/MyProfile/MyProfile'
+import DoctorLayout from './components/Navbar/DoctorLayout'
+import { PatientRoute, ProtectedRoute, PublicRoute } from './pages/Auth/RouteGuards'
+import Dashboard from './pages/Doctor/Dashboard/Dashboard'
+
+
+// Toastify
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
 
   return (
     <>
-      <Navbar />
+      <ToastContainer />
+
       <ScrollArrow />
       <ScrollToTop />
 
       <Routes>
-        {/* Public routes - accessible to everyone */}
-        <Route path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/doctors' element={<Doctor />} />
-        <Route path='/doctor-profile/:doctorId' element={<DoctorProfile />} />
-        <Route path='/contact' element={<Contact />} />
 
-        <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
-        <Route path='/register' element={<PublicRoute><Register /></PublicRoute>} />
+        {/* Patient routes */}
+        <Route path='/*' element={
+          <PatientRoute>
+            <Navbar />
 
-        {/* Patient-only routes */}
-        <Route path='/my-profile' element={
-          <ProtectedRoute allowedRoles={['PATIENT']}>
-            <MyProfile />
-          </ProtectedRoute>} />
+            <Routes>
+              {/* Public routes - accessible to everyone */}
+              <Route path='/' element={<Home />} />
+              <Route path='/about' element={<About />} />
+              <Route path='/doctors' element={<Doctor />} />
+              <Route path='/doctor-profile/:doctorId' element={<DoctorProfile />} />
+              <Route path='/contact' element={<Contact />} />
 
-        <Route path='/my-appointments' element={
-          <ProtectedRoute allowedRoles={['PATIENT']}>
-            <MyAppointments />
-          </ProtectedRoute>} />
+              {/* Auth routes */}
+              <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
+              <Route path='/register' element={<PublicRoute><Register /></PublicRoute>} />
+
+              {/* Patient-only routes */}
+              <Route path='/my-profile' element={
+                <ProtectedRoute allowedRoles={['PATIENT']}>
+                  <MyProfile />
+                </ProtectedRoute>} />
+
+              <Route path='/my-appointments' element={
+                <ProtectedRoute allowedRoles={['PATIENT']}>
+                  <MyAppointments />
+                </ProtectedRoute>} />
+
+              {/* Catch-All Route */}
+              <Route path='*' element={<Navigate to="/" replace />} />
+
+            </Routes>
+
+            <Footer />
+          </PatientRoute>
+        } />
+
+        {/* Doctor routes */}
+        <Route path="/doctor/*" element={
+          <ProtectedRoute allowedRoles={['DOCTOR']}>
+            <DoctorLayout />
+          </ProtectedRoute>
+        }>
+          <Route path='dashboard' element={<Dashboard />} />
+
+          {/* Catch-All Route */}
+          <Route path='*' element={<Navigate to="/doctor/dashboard" replace />} />
+
+        </Route>
 
       </Routes>
-
-      <Footer />
     </>
   )
 }
 
 export default App
-
-
-// Redirect logged-in users away from login/register pages
-function PublicRoute({ children }) {
-
-  const email = localStorage.getItem('email');
-  const role = localStorage.getItem('role');
-
-  if (email && role) {
-    if (role === 'ADMIN') return <Navigate to="/admin/dashboard" replace />
-    if (role === 'DOCTOR') return <Navigate to="/doctor/dashboard" replace />
-    return <Navigate to="/" replace />
-  }
-
-  return children
-}

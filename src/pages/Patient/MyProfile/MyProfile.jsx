@@ -4,9 +4,11 @@ import PopupAlert from '../../../components/common/PopupAlert/PopupAlert';
 import InputField from '../../../components/common/InputField/InputField';
 import './MyProfile.css';
 
+import { toast } from "react-toastify";
+
+
 function MyProfile() {
 
-    const patientId = localStorage.getItem("id");
     const role = localStorage.getItem("role");
 
     const navigate = useNavigate();
@@ -37,7 +39,7 @@ function MyProfile() {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/patients/${patientId}`,
+                const response = await fetch(`http://localhost:8080/patients/my-profile`,
                     {
                         credentials: "include", // required to send/receive cookies
                     }
@@ -58,6 +60,7 @@ function MyProfile() {
                     return;
                 }
 
+                
                 setProfile(fromBackEnd);
                 setFormData(fromBackEnd);
                 console.log(fromBackEnd);
@@ -74,8 +77,9 @@ function MyProfile() {
                 setLoading(false);
             }
         };
+
         fetchProfile();
-    }, [patientId]);
+    }, []);
 
 
     const handlePhotoChange = async (e) => {
@@ -85,7 +89,6 @@ function MyProfile() {
 
         const payload = new FormData();
 
-        payload.append('id', patientId);
         payload.append('role', role);
         payload.append('image', file);
 
@@ -115,12 +118,12 @@ function MyProfile() {
 
             setProfile(prev => ({
                 ...prev,
-                imageUrl: fromBackEnd.imageUrl
+                imageUrl: fromBackEnd.data
             }));
 
             setFormData(prev => ({
                 ...prev,
-                imageUrl: fromBackEnd.imageUrl
+                imageUrl: fromBackEnd.data
             }));
 
             console.log(fromBackEnd);
@@ -153,7 +156,7 @@ function MyProfile() {
         setSaving(true);
 
         try {
-            const response = await fetch(`http://localhost:8080/patients/updateProfile/${patientId}`,
+            const response = await fetch(`http://localhost:8080/patients/update-profile`,
                 {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },

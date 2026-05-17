@@ -62,19 +62,36 @@
     border: 1px solid #778899;
 }
 
-.cancel-btn:hover {
-    filter: brightness(1);
+.booked {
+    color: #1d4ed8;
+    border: 1px solid #1d4ed8;
+    background: #f5f8fb;
 }
 
-.cancel-btn.cancelled {
-    color: #ff0000;
-    border: 1px solid #ff0000;
+.cancelled {
+    color: #dc2626;
+    border: 1px solid #dc2626;
+    background: #fff9f9;
 }
 
-.cancel-btn.completed {
-    color: #00b09b;
-    border: 1px solid #00b09b;
+.completed {    
+    color: #16a34a;
+    border: 1px solid #16a34a;
+    background: #f9fffa;
 }
+
+.rejected {
+    color: #ea580c;
+    border: 1px solid #ea580c;
+    background: #fffcf9;
+}
+
+.expired {
+    color: #6b7280;
+    border: 1px solid #6b7280;
+    background: #f3f4f6;
+}
+
 
 @media screen and (max-width:620px) {
     .my-appointments>h2 {

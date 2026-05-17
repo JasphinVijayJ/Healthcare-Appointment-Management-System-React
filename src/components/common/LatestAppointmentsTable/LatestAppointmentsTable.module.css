@@ -1,0 +1,127 @@
+
+/* Table card */
+.tableCard {
+    border: 1px solid #ebebeb;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.tableHeader {
+    padding: 18px 22px;
+    border-bottom: 1px solid #ebebeb;
+}
+
+.tableTitle {
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tableIcon {
+    font-size: 20px;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead tr {
+    background: #f8fafc;
+}
+
+.table th {
+    padding: 11px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: lightslategray;
+    font-size: 12px;
+}
+
+.table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #ebebeb;
+    font-size: 15px;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table tbody tr:hover {
+    background: #fafbff;
+}
+
+.index {
+    color: lightslategray !important;
+    font-weight: 500;
+}
+
+/* Status badges */
+.badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.completed {
+    background: #f0fdf4;
+    color: #22c55e;
+}
+
+.booked {
+    background: #fffbeb;
+    color: #f59e0b;
+}
+
+.cancelled {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+.rejected {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+/* Action buttons */
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btnComplete,
+.btnCancel {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.15s;
+}
+
+.btnComplete {
+    background: #f0fdf4;
+    color: #22c55e;
+    border: 1.5px solid #bbf7d0;
+}
+
+.btnCancel {
+    background: #fef2f2;
+    color: #ef4444;
+    border: 1.5px solid #fecaca;
+}
+
+.btnComplete:hover,
+.btnCancel:hover {
+    opacity: 0.75;
+}

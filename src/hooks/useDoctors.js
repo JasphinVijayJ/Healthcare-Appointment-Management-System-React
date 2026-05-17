@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DOCTORS } from '../data/doctorsData';
+import { DOCTORS } from '../utils/doctorsData';
 
 export const useDoctors = () => {
 
@@ -7,6 +7,7 @@ export const useDoctors = () => {
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
 
+    
     useEffect(() => {
         const fetchDoctors = async () => {
             try {

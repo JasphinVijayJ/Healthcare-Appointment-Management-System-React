@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const useLogout = () => {
     const navigate = useNavigate();
     const intervalRef = useRef(null);
-    const [popup, setPopup] = useState({ show: false, message: "", type: "success" });
 
     // Manual Logout
     const logout = useCallback(async () => {
@@ -19,13 +18,14 @@ export const useLogout = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                setPopup({ show: true, message: data.message, type: "success" });
+                // setPopup({ show: true, message: data.message, type: "success" });
+
+                localStorage.clear(); // clear immediately id, email, role to prevent auto-logout on refresh
 
                 // Auto-hide popup after 2.2s and navigate
                 setTimeout(() => {
-                    setPopup({ show: false, message: "", type: "success" });
-                    
-                    localStorage.clear(); // clear id, email, role
+                    // setPopup({ show: false, message: "", type: "success" });
+
                     navigate("/login");
                 }, 2200);
             } else {
@@ -36,7 +36,7 @@ export const useLogout = () => {
             }
         } catch (error) {
             console.error("Logout error:", error);
-            
+
             localStorage.clear();
             navigate("/login");
         }
@@ -58,26 +58,27 @@ export const useLogout = () => {
 
                 if (!response.ok) {
                     // Cookie expired or missing → auto logout
-                    setPopup({ show: true, message: "Session expired. You have been logged out.", type: "error" });
+                    // setPopup({ show: true, message: "Session expired. You have been logged out.", type: "error" });
+
+                    if (intervalRef.current) clearInterval(intervalRef.current);
+
+                    localStorage.clear();
 
                     // Auto-hide popup after 3s and navigate
                     setTimeout(() => {
-                        setPopup({ show: false, message: "", type: "error" });
+                        // setPopup({ show: false, message: "", type: "error" });
 
-                        if (intervalRef.current) clearInterval(intervalRef.current);
-
-                        localStorage.clear();
                         navigate("/login");
                     }, 3000);
                 }
 
             } catch {
                 // Server unreachable → auto logout
-                setPopup({ show: true, message: "Server unreachable. You have been logged out.", type: "error" });
+                // setPopup({ show: true, message: "Server unreachable. You have been logged out.", type: "error" });
 
                 // Auto-hide popup after 3s and navigate
                 setTimeout(() => {
-                    setPopup({ show: false, message: "", type: "error" });
+                    // setPopup({ show: false, message: "", type: "error" });
 
                     if (intervalRef.current) clearInterval(intervalRef.current);
 
@@ -93,5 +94,5 @@ export const useLogout = () => {
         return () => clearInterval(intervalRef.current);          // cleanup on unmount
     }, [navigate]);
 
-    return { logout, popup }; // return logout function and popup state
+    return { logout }; // return logout function and popup state
 };
