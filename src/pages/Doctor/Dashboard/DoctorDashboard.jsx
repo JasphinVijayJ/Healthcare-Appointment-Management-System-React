@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import styles from './Dashboard.module.css'
+import styles from './DoctorDashboard.module.css'
 import LatestAppointmentsTable from '../../../components/common/LatestAppointmentsTable/LatestAppointmentsTable';
 
-function Dashboard() {
+function DoctorDashboard() {
 
   const [dashboard, setDashboard] = useState(null);
   const [appointments, setAppointments] = useState([]);
@@ -84,4 +84,4 @@ function Dashboard() {
   )
 }
 
-export default Dashboard
+export default DoctorDashboard

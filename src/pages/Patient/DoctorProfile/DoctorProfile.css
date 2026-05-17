@@ -1,6 +1,6 @@
 /* Doctor Header */
 .doctor-profile-section {
-    padding-top: 100px;
+    padding-top: 90px;
     width: 85%;
     justify-self: center;
 }
@@ -39,7 +39,7 @@
 
 /* Profile Content */
 .profile-content {
-    margin-top: 40px;
+    margin-top: 20px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
@@ -65,14 +65,10 @@
 }
 
 /* Book Button */
-.booking-error {
-    padding-top: 4px;
-}
-
 .book-appointment-btn {
     display: block;
     justify-self: center;
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 .booking-note {

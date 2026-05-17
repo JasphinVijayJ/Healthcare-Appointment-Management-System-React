@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { toast } from "react-toastify";
+import { promiseToast } from "../../utils/promiseToast";
+
 export const useLogout = () => {
     const navigate = useNavigate();
     const intervalRef = useRef(null);
@@ -11,35 +14,28 @@ export const useLogout = () => {
         if (intervalRef.current) clearInterval(intervalRef.current);
 
         try {
-            const response = await fetch("http://localhost:8080/auth/logout", {
-                method: "POST",
-                credentials: "include", // sends jwt cookie to backend to clear it
-            });
+            await promiseToast(
+                "http://localhost:8080/auth/logout",
+                {
+                    method: "POST",
+                    credentials: "include",
+                },
+                {
+                    loading: "Logging out...",
+                    success: (data) => data.message,
+                    error: (err) => err.message
+                }
+            );
 
-            if (response.ok) {
-                const data = await response.json();
-                // setPopup({ show: true, message: data.message, type: "success" });
-
-                localStorage.clear(); // clear immediately id, email, role to prevent auto-logout on refresh
-
-                // Auto-hide popup after 2.2s and navigate
-                setTimeout(() => {
-                    // setPopup({ show: false, message: "", type: "success" });
-
-                    navigate("/login");
-                }, 2200);
-            } else {
-                console.error("Logout failed:", response.status);
-
-                localStorage.clear();
-                navigate("/login");
-            }
         } catch (error) {
             console.error("Logout error:", error);
-
+        } finally {
+            // Always clear local data
             localStorage.clear();
+
             navigate("/login");
         }
+
     }, [navigate]);
 
 
@@ -51,48 +47,55 @@ export const useLogout = () => {
 
         const checkAutoLogout = async () => {
             try {
-                const response = await fetch("http://localhost:8080/auth/check", {
-                    method: "GET",
-                    credentials: "include", // browser sends jwt cookie to backend automatically
-                });
+                const response = await fetch(
+                    "http://localhost:8080/auth/check",
+                    {
+                        method: "GET",
+                        credentials: "include",
+                    }
+                );
 
+
+                // Session expired or cookie missing → auto logout
                 if (!response.ok) {
-                    // Cookie expired or missing → auto logout
-                    // setPopup({ show: true, message: "Session expired. You have been logged out.", type: "error" });
 
                     if (intervalRef.current) clearInterval(intervalRef.current);
 
                     localStorage.clear();
 
-                    // Auto-hide popup after 3s and navigate
-                    setTimeout(() => {
-                        // setPopup({ show: false, message: "", type: "error" });
+                    toast.error("Session expired. You have been logged out.");
 
-                        navigate("/login");
-                    }, 3000);
+                    navigate("/login");
                 }
 
-            } catch {
-                // Server unreachable → auto logout
-                // setPopup({ show: true, message: "Server unreachable. You have been logged out.", type: "error" });
+            } catch (error) {
 
-                // Auto-hide popup after 3s and navigate
-                setTimeout(() => {
-                    // setPopup({ show: false, message: "", type: "error" });
+                console.error("Auto logout error:", error);
 
-                    if (intervalRef.current) clearInterval(intervalRef.current);
+                if (intervalRef.current) clearInterval(intervalRef.current);
 
-                    localStorage.clear();
-                    navigate("/login");
-                }, 3000);
+                localStorage.clear();
+
+                toast.error("Server unreachable. You have been logged out.");
+
+                navigate("/login");
             }
         };
 
-        checkAutoLogout(); // run immediately on mount
+        // Run immediately on mount
+        checkAutoLogout();
 
-        intervalRef.current = setInterval(checkAutoLogout, 60000); // check every 1 minute
-        return () => clearInterval(intervalRef.current);          // cleanup on unmount
+        // Check every 1 minute
+        intervalRef.current = setInterval(checkAutoLogout, 60000);
+
+        // Cleanup on unmount
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+
     }, [navigate]);
 
-    return { logout }; // return logout function and popup state
+    return { logout }; // return logout function
 };

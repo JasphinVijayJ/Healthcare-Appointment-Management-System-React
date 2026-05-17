@@ -10,9 +10,11 @@ function Doctor() {
     const [departmentFilter, setDepartmentFilter] = useState('All Department');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
+
     useEffect(() => {
         document.title = "HAMS | Doctors";
     }, []);
+
 
     // Get unique departments from DOCTORS
     const departments = useMemo(() => {
@@ -25,12 +27,14 @@ function Doctor() {
         return list;
     }, [doctors]);
 
+    
     // Filter doctors based on selected department
     const filteredDoctors = useMemo(() =>
         departmentFilter === 'All Department'
             ? doctors
             : doctors.filter(doctor => doctor.specialty === departmentFilter)
         , [doctors, departmentFilter]);
+
 
     const loadMoreDoctors = () => {
         const newVisibleCount = visibleDoctors + 4;
@@ -39,7 +43,9 @@ function Doctor() {
         else setVisibleDoctors(newVisibleCount);
     };
 
+
     const remainingDoctors = filteredDoctors.length - visibleDoctors;
+
 
     useEffect(() => {
         if (!dropdownOpen) return;
@@ -55,6 +61,7 @@ function Doctor() {
         return () => document.removeEventListener('click', handleClickOutside);
     }, [dropdownOpen]);
 
+    
     return (
         <>
             <section className='our-doctors'>

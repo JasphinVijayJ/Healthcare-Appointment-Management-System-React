@@ -3,6 +3,9 @@ import './Auth.css'
 import InputField from '../../components/common/InputField/InputField';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { promiseToast } from '../../utils/promiseToast';
+
+
 const inputFields = [
     { label: "Full Name", name: "name", type: "text", placeholder: "Enter your Name", maxLength: 50 },
     { label: "Email", name: "email", type: "email", placeholder: "Enter your Email", maxLength: 50 },
@@ -12,6 +15,7 @@ const inputFields = [
 
 // Email regex pattern
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 
 function Register() {
 
@@ -36,7 +40,6 @@ function Register() {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
         setTouched((prev) => ({ ...prev, [name]: true }));
-        setErrors(prev => ({ ...prev, submit: "" }));
     };
 
     // Validate inputs
@@ -89,36 +92,38 @@ function Register() {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:8080/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: formData.name.trim(),
-                    email: formData.email.trim(),
-                    password: formData.password.trim(),
-                    confirmPassword: formData.confirmPassword.trim()
-                }),
-            });
+            const response = await promiseToast(
+                "http://localhost:8080/auth/register",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name: formData.name.trim(),
+                        email: formData.email.trim(),
+                        password: formData.password.trim(),
+                        confirmPassword: formData.confirmPassword.trim()
+                    }),
+                },
+                {
+                    loading: "Creating account...",
+                    success: (data) => data.message,
+                    error: (err) => err.message
+                }
+            );
 
-            const fromBackEnd = await response.json();
 
-            if (!response.ok) {
-                // Backend validation failed → show exact error
-                setErrors({ submit: fromBackEnd.message });
-                console.log(fromBackEnd);
-                return;
-            }
+            console.log(response);
 
-            console.log(fromBackEnd);
             navigate("/login");
+
         } catch (error) {
-            setErrors({ submit: "Error: Server error. Please try again later." });
-            console.error("Error:", error);
+            console.error("Register error:", error);
         }
         finally {
             setLoading(false);
         }
     };
+
 
     return (
         <section className='auth-section'>
@@ -149,8 +154,6 @@ function Register() {
                 >
                     {loading ? "Creating account..." : "Create account"}
                 </button>
-
-                <small className="error-msg">{errors.submit}</small>
 
                 <p className='auth-redirect'>Already have an account? <Link className='gradient-highlight' to={"/login"}>Login here</Link></p>
             </form>

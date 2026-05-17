@@ -3,6 +3,7 @@ import { formatDateToLong, formatTimeToAMPM } from '../../../utils/dateFormatter
 import { useAppointmentStatus } from '../../../hooks/useAppointmentStatus';
 import styles from './LatestAppointmentsTable.module.css'
 
+
 function LatestAppointmentsTable({ appointments }) {
 
     const [appointmentList, setAppointmentList] = useState(appointments);

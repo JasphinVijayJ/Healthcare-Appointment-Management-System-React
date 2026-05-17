@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InputField from '../../../components/common/InputField/InputField';
-import './MyProfile.css';
+import styles from './DoctorMyProfile.module.css'
 
 import { promiseToast } from '../../../utils/promiseToast';
 
 
-function MyProfile() {
+function DoctorMyProfile() {
 
     const role = localStorage.getItem("role");
 
@@ -38,7 +38,7 @@ function MyProfile() {
     const fetchProfile = async () => {
         try {
             const response = await promiseToast(
-                `http://localhost:8080/patients/my-profile`,
+                `http://localhost:8080/doctors/my-profile`,
                 {
                     credentials: "include",
                 },
@@ -118,7 +118,7 @@ function MyProfile() {
 
         try {
             const response = await promiseToast(
-                `http://localhost:8080/patients/update-profile`,
+                `http://localhost:8080/doctors/update-profile`,
                 {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
@@ -148,15 +148,34 @@ function MyProfile() {
 
 
     const validate = () => {
+
         const newErrors = {};
 
-        if (!formData.name?.trim()) newErrors.name = 'Name is required.';
-        if (!formData.phone?.trim()) newErrors.phone = 'Phone is required.';
-        else if (!/^\d{10}$/.test(formData.phone.trim())) newErrors.phone = 'Phone must be 10 digits.';
-        if (!formData.dob) newErrors.dob = 'Date of birth is required.';
-        if (!formData.address?.trim()) newErrors.address = 'Address is required.';
+        if (!formData.name?.trim())
+            newErrors.name = 'Name is required.';
+
+        if (!formData.phone?.trim())
+            newErrors.phone = 'Phone is required.';
+        else if (!/^\d{10}$/.test(formData.phone.trim()))
+            newErrors.phone = 'Phone must be 10 digits.';
+
+        if (!formData.specialty?.trim())
+            newErrors.specialty = 'Specialty is required.';
+
+        if (!formData.qualifications?.trim())
+            newErrors.qualifications = 'Qualifications are required.';
+
+        if (!formData.languages?.trim())
+            newErrors.languages = 'Languages are required.';
+
+        if (formData.experience === "" || formData.experience < 0)
+            newErrors.experience = 'Valid experience is required.';
+
+        if (formData.consultationFee === "" || formData.consultationFee < 0)
+            newErrors.consultationFee = 'Valid consultation fee is required.';
 
         setErrors(newErrors);
+
         return Object.keys(newErrors).length === 0;
     };
 
@@ -177,19 +196,19 @@ function MyProfile() {
 
 
     return (
-        <section className="mp-section">
-            <div className='mp-container'>
+        <section className={styles.mpSection}>
+            <div className={styles.mpContainer}>
 
                 {/* ── Top: Avatar + Name + Buttons ── */}
-                <section className="mp-top">
-                    <div className='mp-avatar-wrap'>
-                        <div className='mp-avatar'>
+                <section className={styles.mpTop}>
+                    <div className={styles.mpAvatarWrapper}>
+                        <div className={styles.mpAvatar}>
                             {profile && profile.imageUrl && (
                                 <img src={profile.imageUrl} alt='My Profile Image' />
                             )}
                         </div>
 
-                        <button className='mp-camera-btn' title="Change photo" disabled={uploadingPhoto} onClick={() => fileInputRef.current?.click()}>
+                        <button className={styles.mpCameraBtn} title="Change photo" disabled={uploadingPhoto} onClick={() => fileInputRef.current?.click()}>
                             {uploadingPhoto ? '…' : (
                                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -203,54 +222,56 @@ function MyProfile() {
                             style={{ display: 'none' }} onChange={handlePhotoChange} />
                     </div>
 
-                    <div className='mp-identity'>
+                    <div className={styles.mpIdentity}>
                         <h2>{profile?.name}</h2>
-                        <span className='mp-badge'>{profile?.role}</span>
+                        <span className={styles.mpBadge}>{profile?.role}</span>
                     </div>
 
                     {!isEditing ? (
-                        <button className='btn-1 btn-2 mp-edit-btn' onClick={() => { setIsEditing(true); }}>
+                        <button className={`btn-1 btn-2 ${styles.mpEditBtn}`} onClick={() => { setIsEditing(true); }}>
                             Edit
                         </button>
                     ) : (
-                        <div className='mp-btn-group'>
-                            <button className='btn-1 btn-2 mp-save-btn' onClick={handleSave} disabled={saving || !isChanged}>
+                        <div className={styles.mpBtnGroup}>
+                            <button className={`btn-1 btn-2 ${styles.mpSaveBtn}`} onClick={handleSave} disabled={saving || !isChanged}>
                                 {saving ? 'Saving…' : 'Save'}
                             </button>
 
-                            <button className='btn-1 btn-2 mp-cancel-btn' onClick={handleCancel}>Cancel</button>
+                            <button className={`btn-1 btn-2 ${styles.mpCancelBtn}`} onClick={handleCancel}>
+                                Cancel
+                            </button>
                         </div>
                     )}
 
                 </section>
 
 
-                <div className='mp-divider' />
+                <div className={styles.mpDivider} />
 
 
                 {/* ── Fields ── */}
-                <section className='mp-fields'>
+                <section className={styles.mpFields}>
 
-                    <div className='mp-row'>
-                        <span className='mp-label'>Email</span>
+                    <div className={styles.mpRow}>
+                        <span className={styles.mpLabel}>Email</span>
                         <span>{profile?.email}</span>
                     </div>
 
-                    <div className='mp-row'>
-                        <span className='mp-label'>Role</span>
+                    <div className={styles.mpRow}>
+                        <span className={styles.mpLabel}>Role</span>
                         <span>{profile?.role}</span>
                     </div>
 
                     {isEditing
                         ? <>
-                            <small className='mp-field-spacing'></small>
+                            <small className={styles.mpFieldSpacing}></small>
 
                             <InputField label="Full Name" type="text" name="name"
                                 value={formData?.name} placeholder="Your full name"
                                 onChange={handleChange} error={errors.name} maxLength={50} />
                         </>
-                        : <div className='mp-row'>
-                            <span className='mp-label'>Full Name</span>
+                        : <div className={styles.mpRow}>
+                            <span className={styles.mpLabel}>Full Name</span>
                             <span>{profile?.name}</span>
                         </div>
                     }
@@ -260,67 +281,64 @@ function MyProfile() {
                             value={formData?.phone} placeholder="10-digit number"
                             onChange={handleChange} error={errors.phone} maxLength={10} />
 
-                        : <div className='mp-row'>
-                            <span className='mp-label'>Phone</span>
+                        : <div className={styles.mpRow}>
+                            <span className={styles.mpLabel}>Phone</span>
                             <span>{profile?.phone}</span>
                         </div>
                     }
 
                     {isEditing
-                        ? <InputField label="Date of Birth" type="date" name="dob"
-                            value={formData?.dob} onChange={handleChange} error={errors.dob} />
+                        ? <InputField label="Specialty" type="text" name="specialty"
+                            value={formData?.specialty} placeholder="Your specialty"
+                            onChange={handleChange} error={errors.specialty} maxLength={50} />
 
-                        : <div className='mp-row'>
-                            <span className='mp-label'>Date of Birth</span>
-                            <span>{profile?.dob}</span>
+                        : <div className={styles.mpRow}>
+                            <span className={styles.mpLabel}>Specialty</span>
+                            <span>{profile?.specialty}</span>
                         </div>
                     }
 
-                    {isEditing ? (
-                        <div className='inputField-group'>
-                            <label className='inputField-label'>Gender</label>
-                            <select className='inputField-box' name="gender"
-                                value={formData?.gender} onChange={handleChange}>
-                                {(profile?.allGender ?? []).map(g => <option key={g} value={g}>{g}</option>)}
-                            </select>
-                        </div>
-                    ) : (
-                        <div className='mp-row'>
-                            <span className='mp-label'>Gender</span>
-                            <span>{profile?.gender}</span>
-                        </div>
-                    )}
+                    {isEditing
+                        ? <InputField label="Qualifications" type="text" name="qualifications"
+                            value={formData?.qualifications} placeholder="Your Qualifications"
+                            onChange={handleChange} error={errors.qualifications} maxLength={50} />
 
-                    {isEditing ? (
-                        <>
-                            <small className='mp-field-spacing'></small>
-
-                            <div className='inputField-group'>
-                                <label className='inputField-label'>Blood Group</label>
-                                <select className='inputField-box' name="bloodGroup"
-                                    value={formData?.bloodGroup} onChange={handleChange}>
-                                    {(profile?.allBloodGroup ?? []).map(bg => <option key={bg} value={bg}>{bg}</option>)}
-                                </select>
-                            </div>
-                        </>
-                    ) : (
-                        <div className='mp-row'>
-                            <span className='mp-label'>Blood Group</span>
-                            <span>{profile?.bloodGroup}</span>
+                        : <div className={styles.mpRow}>
+                            <span className={styles.mpLabel}>Qualifications</span>
+                            <span>{profile?.qualifications}</span>
                         </div>
-                    )}
+                    }
 
                     {isEditing
-                        ? <>
-                            <small className='mp-field-spacing'></small>
+                        ? <InputField label="Experience (Years)" type="number" name="experience"
+                            value={formData?.experience} placeholder="Years of experience"
+                            onChange={handleChange} error={errors.experience} />
 
-                            <InputField label="Address" type="text" name="address"
-                                value={formData?.address} placeholder="Your address"
-                                onChange={handleChange} error={errors.address} maxLength={300} />
-                        </>
-                        : <div className='mp-row'>
-                            <span className='mp-label'>Address</span>
-                            <span>{profile?.address}</span>
+                        : <div className={styles.mpRow}>
+                            <span className={styles.mpLabel}>Experience (Years)</span>
+                            <span>{profile?.experience} Years</span>
+                        </div>
+                    }
+
+                    {isEditing
+                        ?<InputField label="Consultation Fee" type="number" name="consultationFee"
+                                value={formData?.consultationFee} placeholder="Consultation fee"
+                                onChange={handleChange} error={errors.consultationFee} />
+                        
+                        : <div className={styles.mpRow}>
+                            <span className={styles.mpLabel}>Consultation fee</span>
+                            <span>₹ {profile?.consultationFee}</span>
+                        </div>
+                    }
+
+                    {isEditing
+                        ? <InputField label="Languages" type="text" name="languages"
+                                value={formData?.languages} placeholder="Languages spoken"
+                                onChange={handleChange} error={errors.languages} maxLength={50} />
+
+                        : <div className={styles.mpRow}>
+                            <span className={styles.mpLabel}>Languages</span>
+                            <span>{profile?.languages}</span>
                         </div>
                     }
 
@@ -331,4 +349,4 @@ function MyProfile() {
     )
 }
 
-export default MyProfile;
+export default DoctorMyProfile;

@@ -14,14 +14,19 @@ import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import MyAppointments from './pages/Patient/MyAppointments/MyAppointments'
 import MyProfile from './pages/Patient/MyProfile/MyProfile'
-import DoctorLayout from './components/Navbar/DoctorLayout'
 import { PatientRoute, ProtectedRoute, PublicRoute } from './pages/Auth/RouteGuards'
-import Dashboard from './pages/Doctor/Dashboard/Dashboard'
 
 
 // Toastify
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+
+
+// Doctor imports
+import DoctorDashboard from './pages/Doctor/Dashboard/DoctorDashboard'
+import DoctorLayout from './components/Navbar/DoctorLayout'
+import DoctorSchedule from './pages/Doctor/DoctorSchedule/DoctorSchedule'
+import DoctorMyProfile from './pages/Doctor/MyProfile/DoctorMyProfile'
 
 
 function App() {
@@ -78,7 +83,9 @@ function App() {
             <DoctorLayout />
           </ProtectedRoute>
         }>
-          <Route path='dashboard' element={<Dashboard />} />
+          <Route path='dashboard' element={<DoctorDashboard />} />
+          <Route path='schedule' element={<DoctorSchedule />} />
+          <Route path='my-profile' element={<DoctorMyProfile />} />
 
           {/* Catch-All Route */}
           <Route path='*' element={<Navigate to="/doctor/dashboard" replace />} />

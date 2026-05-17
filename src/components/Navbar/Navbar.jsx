@@ -3,12 +3,14 @@ import { Link, useLocation } from 'react-router-dom'
 import { useLogout } from '../../pages/Auth/useLogout';
 import './Navbar.css'
 
+
 const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Doctors', path: '/doctors' },
     { name: 'Contact', path: '/contact' }
 ];
+
 
 function Navbar() {
 
@@ -20,9 +22,11 @@ function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userEmail, setUserEmail] = useState('');
 
+
     const toggleMenu = useCallback(() => {
         setIsMenuOpen(prev => !prev);
     }, []);
+
 
     const closeMenu = useCallback(() => {
         setIsMenuOpen(false);
@@ -48,7 +52,6 @@ function Navbar() {
             document.body.style.overflow = 'unset';
         };
     }, [isMenuOpen, isDropdownOpen, closeMenu]);
-
 
 
     // Handle all click outside events in one effect

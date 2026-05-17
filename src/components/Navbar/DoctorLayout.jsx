@@ -1,32 +1,25 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useLogout } from "../../pages/Auth/useLogout";
 import styles from './DoctorLayout.module.css'
-import PopupAlert from "../common/PopupAlert/PopupAlert";
 import { HomeIcon, PlusIcon, CalendarIcon, UsersIcon } from "../../utils/Icons";
 
 
 const doctorNavLinks = [
   { name: 'Dashboard', path: '/doctor/dashboard', icon: <HomeIcon /> },
-  { name: 'My Schedule', path: '/doctor/schedule', icon: <PlusIcon /> },
   { name: 'Appointments', path: '/doctor/appointments', icon: <CalendarIcon /> },
-  { name: 'My Profile', path: '/doctor/profile', icon: <UsersIcon /> }
+  { name: 'My Schedule', path: '/doctor/schedule', icon: <PlusIcon /> },
+  { name: 'My Profile', path: '/doctor/my-profile', icon: <UsersIcon /> }
 ];
+
 
 function DoctorLayout() {
 
   const location = useLocation(); // Get current URL path
-  const { logout, popup } = useLogout();
+  const { logout } = useLogout();
+
 
   return (
     <>
-
-      {/* PopupAlert.jsx */}
-      <PopupAlert
-        show={popup.show}
-        message={popup.message}
-        type={popup.type}
-      />
-
       {/* Top Navbar */}
       <header className={styles.navsection}>
         <Link to="/doctor/dashboard" className={`${styles.logo} gradient-highlight`}>

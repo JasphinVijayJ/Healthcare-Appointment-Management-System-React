@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { promiseToast } from "../utils/promiseToast";
+
 
 export const useAppointmentStatus = () => {
+
     const [loadingId, setLoadingId] = useState(null);
+
 
     const updateAppointmentStatus = async (id, status, setAppointments) => {
         if (loadingId === id) return;
@@ -9,35 +13,36 @@ export const useAppointmentStatus = () => {
         setLoadingId(id);
 
         try {
-            const response = await fetch(`http://localhost:8080/appointments/update-status?appointmentId=${id}&status=${status}`, {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
+            const response = await promiseToast(
+                `http://localhost:8080/appointments/update-status?appointmentId=${id}&status=${status}`,
+                {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                 },
-            });
-
-            const fromBackEnd = await response.json();
-
-            if (!response.ok) {
-                // Backend validation failed → show exact error
-                console.log(fromBackEnd);
-                return;
-            }
+                {
+                    loading: "Updating appointment...",
+                    success: (data) => data.message,
+                    error: (err) => err.message
+                }
+            );
 
 
             setAppointments((prev) =>
                 prev.map((a) =>
-                    a.appointmentId === id ? { ...a, status: fromBackEnd.data } : a));
+                    a.appointmentId === id ? { ...a, status: response.data } : a));
 
-            console.log(fromBackEnd);
+            console.log(response);
 
         } catch (error) {
-            console.error("Network Error:", error);
+            console.error("Update status error:", error);
         } finally {
             setLoadingId(null);
         }
     };
+
 
     return {
         loadingId,

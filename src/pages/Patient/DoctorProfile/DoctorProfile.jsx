@@ -3,10 +3,12 @@ import { useEffect, useMemo, useState } from 'react';
 
 import DoctorAbout from "./DoctorAbout";
 import SlotSelector from '../../../components/common/SlotSelector/SlotSelector';
-import PopupAlert from "../../../components/common/PopupAlert/PopupAlert";
 import { demoDays, demoTimeSlots, DOCTORS } from "../../../utils/doctorsData";
 import { formatDateToDayLabel, formatTimeToHHMM } from "../../../utils/dateFormatter";
 import './DoctorProfile.css'
+
+import { promiseToast } from "../../../utils/promiseToast";
+
 
 function DoctorProfile() {
 
@@ -20,13 +22,12 @@ function DoctorProfile() {
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [bookingError, setBookingError] = useState("");
 
-    const [popup, setPopup] = useState({ show: false, message: "", type: "success" });
 
     useEffect(() => {
         document.title = "HAMS | Doctor Profile";
     }, []);
+
 
     useEffect(() => {
         const fetchDoctor = async () => {
@@ -53,6 +54,7 @@ function DoctorProfile() {
         fetchDoctor();
     }, [doctorId]);
 
+
     useEffect(() => {
         const fetchAvailability = async () => {
             try {
@@ -62,7 +64,6 @@ function DoctorProfile() {
 
                 if (!response.ok) {
                     // Backend validation failed → show exact error
-                    setBookingError(fromBackEnd.message);
                     console.log(fromBackEnd);
                     return;
                 }
@@ -76,7 +77,6 @@ function DoctorProfile() {
                 }));
 
                 setAvailableDays(formattedDays);
-                setBookingError("");    // clear old errors
 
                 // Auto-select first day
                 if (formattedDays.length > 0) setSelectedDay(formattedDays[0].day);
@@ -89,26 +89,31 @@ function DoctorProfile() {
                     timeSlots: demoTimeSlots
                 })))
                 setSelectedDay(demoDays[0]);
-                setBookingError("Unable to load doctor availability. Showing offline data.");
+                // setBookingError("Unable to load doctor availability. Showing offline data.");
             }
         }
         fetchAvailability();
     }, [doctorId]);
 
+
     // Reset selected time whenever a new day is selected
     useEffect(() => setSelectedTime(''), [selectedDay]);
 
+
     // Display next 6 days for booking
     const days = useMemo(() => availableDays.map(d => d.day), [availableDays]);
+
 
     // Time slots
     const selectedDayObject = useMemo(() =>
         availableDays.find(d => d.day === selectedDay),
         [availableDays, selectedDay]);
 
+
     const timeSlots = useMemo(() =>
         selectedDayObject ? selectedDayObject.timeSlots.map(t => formatTimeToHHMM(t)) : [],
         [selectedDayObject]);
+
 
     const handleBookAppointment = async () => {
         if (loading) return;   // prevent double click
@@ -116,49 +121,51 @@ function DoctorProfile() {
         try {
             setLoading(true);
 
-            const response = await fetch("http://localhost:8080/appointments/book", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", },
-                credentials: "include", // required to send/receive cookies
-                body: JSON.stringify({
-                    doctorId: doctor.id,
-                    appointmentDate: selectedDayObject.rawDate,
-                    appointmentTime: selectedTime
-                }),
-            });
+            await promiseToast(
+                "http://localhost:8080/appointments/book",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        doctorId: doctor.id,
+                        appointmentDate: selectedDayObject.rawDate,
+                        appointmentTime: selectedTime
+                    }),
+                },
+                {
+                    loading: "Booking appointment...",
+                    success: (data) => data.message,
+                    error: (err) => err.message
+                }
+            );
 
-            const fromBackEnd = await response.json();
 
-            if (!response.ok) {
-                // Backend validation failed → show exact error
-                setBookingError(fromBackEnd.message);
-                console.log(fromBackEnd);
-                return;
-            }
-            setPopup({ show: true, message: fromBackEnd.message, type: "success" });
-
-            // Auto-hide popup after 2.2s and navigate
             setTimeout(() => {
-                setPopup({ show: false, message: "", type: "success" });
-                navigate(`/my-appointments`);
-            }, 2200);
+                navigate("/my-appointments");
+            }, 1500);
+
         } catch (error) {
-            console.error(error);
-            setBookingError("Error: Server error. Please try again later.");
+            console.error("Booking error:", error);
         }
         finally {
             setLoading(false);
         }
     };
 
+
     // Disable booking if no selection
     const disableBooking = loading || !selectedDay || !selectedTime;
+
 
     // Prevent render before API response
     if (!doctor)
         return <small className="error-msg error-msg-2" style={{ marginTop: "120px" }}>
             {error || "Loading doctor information..."}
         </small>;
+
 
     return (
         <section className="doctor-profile-section">
@@ -175,13 +182,6 @@ function DoctorProfile() {
                     </div>
                 </div>
             </div>
-
-            {/* PopupAlert.jsx */}
-            <PopupAlert
-                show={popup.show}
-                message={popup.message}
-                type={popup.type}
-            />
 
             <small className="error-msg error-msg-2">{error}</small>
 
@@ -214,8 +214,6 @@ function DoctorProfile() {
                             selectedItem={selectedTime}
                             onSelect={setSelectedTime}
                         />
-
-                        <small className="error-msg error-msg-2 booking-error">{bookingError}</small>
 
                         {/* Book Button */}
                         <button

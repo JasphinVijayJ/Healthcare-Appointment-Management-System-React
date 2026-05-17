@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { promiseToast } from "../../../utils/promiseToast";
 import { formatTimeToHHMM, getButtonText, isPastAppointment } from "../../../utils/dateFormatter";
 import "./MyAppointments.css"
 
@@ -37,7 +38,7 @@ function MyAppointments() {
             setAppointments(fromBackEnd);
             console.log(fromBackEnd);
         } catch (error) {
-            console.log(error);
+            console.error("Fetch appointments error:", error);
             setError("Error: Server error. Please try again later.");
         } finally {
             setLoading(false);
@@ -51,21 +52,22 @@ function MyAppointments() {
 
         try {
             setCancelLoading(prev => ({ ...prev, [appointmentId]: true }));
-            
-            const response = await fetch(`http://localhost:8080/appointments/${appointmentId}/cancel`,
+
+            const response = await promiseToast(
+                `http://localhost:8080/appointments/${appointmentId}/cancel`,
                 {
                     method: "PUT",
-                    credentials: "include", // required to send/receive cookies
-                });
+                    credentials: "include",
+                },
+                {
+                    loading: "Cancelling appointment...",
+                    success: (data) => data.message,
+                    error: (err) => err.message
+                }
+            );
 
-            const fromBackEnd = await response.json();
 
-            if (!response.ok) {
-                // Backend validation failed → show exact error
-                setError(fromBackEnd.message);
-                console.log(fromBackEnd);
-                return;
-            }
+            console.log(response);
 
             setAppointments(prev => prev.map(a =>
                 a.appointmentId === appointmentId
@@ -74,15 +76,14 @@ function MyAppointments() {
             ));
 
         } catch (error) {
-            console.error(error);
-            setError("Error: Server error. Please try again later.");
+            console.error("Cancel error:", error);
         }
         finally {
             setCancelLoading(prev => ({ ...prev, [appointmentId]: false }));
         }
     };
 
-    
+
     return (
         <section className="my-appointments">
             <h2 className="gradient-highlight">My Appointments</h2>

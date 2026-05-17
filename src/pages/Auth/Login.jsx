@@ -3,6 +3,9 @@ import InputField from '../../components/common/InputField/InputField'
 import './Auth.css'
 import { Link, useNavigate } from 'react-router-dom';
 
+import { promiseToast } from '../../utils/promiseToast';
+
+
 // Email regex pattern
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -27,7 +30,6 @@ function Login() {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
         setTouched((prev) => ({ ...prev, [name]: true }));
-        setErrors(prev => ({ ...prev, submit: "" }));
     }
 
     // Validate inputs
@@ -65,39 +67,37 @@ function Login() {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:8080/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include", // required to send/receive cookies
-                body: JSON.stringify({
-                    email: formData.email.trim(),
-                    password: formData.password.trim(),
-                }),
-            });
+            const response = await promiseToast(
+                "http://localhost:8080/auth/login",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        email: formData.email.trim(),
+                        password: formData.password.trim(),
+                    }),
+                },
+                {
+                    loading: "Logging in...",
+                    success: (data) => data.message,
+                    error: (err) => err.message
+                }
+            );
 
-            const fromBackEnd = await response.json();
+            console.log(response);
 
-            if (!response.ok) {
-                // Backend validation failed → show exact error
-                setErrors({ submit: fromBackEnd.message });
-                console.log(fromBackEnd);
-                return;
-            }
-            console.log(fromBackEnd);
-
-            // Save JWT id + email + role in localStorage
-            localStorage.setItem("id", fromBackEnd.id);
-            localStorage.setItem("email", fromBackEnd.email);
-            localStorage.setItem("role", fromBackEnd.role);
+            // Save JWT email + role in localStorage
+            localStorage.setItem("email", response.email);
+            localStorage.setItem("role", response.role);
 
 
-            if (fromBackEnd.role === "ADMIN") navigate("/admin/dashboard");
-            else if (fromBackEnd.role === "DOCTOR") navigate("/doctor/dashboard");
+            if (response.role === "ADMIN") navigate("/admin/dashboard");
+            else if (response.role === "DOCTOR") navigate("/doctor/dashboard");
             else navigate("/");
 
         } catch (error) {
-            setErrors({ submit: "Error: Server error. Please try again later." });
-            console.error("Error:", error);
+            console.error("Login error:", error);
         }
         finally {
             setLoading(false);
@@ -141,7 +141,6 @@ function Login() {
                 >
                     {loading ? "Logging in..." : "Login"}
                 </button>
-                <small className="error-msg">{errors.submit}</small>
 
                 <p className='auth-redirect'>Create an new account? <Link className='gradient-highlight' to={"/register"}>Click here</Link></p>
             </form>

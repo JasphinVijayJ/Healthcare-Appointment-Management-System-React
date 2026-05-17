@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import './ContactForm.css'
-import PopupAlert from '../../../components/common/PopupAlert/PopupAlert';
 import InputField from '../../../components/common/InputField/InputField';
+
+import { promiseToast } from '../../../utils/promiseToast';
+
 
 const inputFields = [
     { name: "name", type: "text", placeholder: "Your Name", maxLength: 50 },
@@ -11,6 +13,7 @@ const inputFields = [
 
 // Email regex pattern
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 
 function ContactForm() {
 
@@ -25,7 +28,6 @@ function ContactForm() {
     const [touched, setTouched] = useState({});
     const [canSubmit, setCanSubmit] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [popupBox, setPopupBox] = useState({ show: false, message: "", type: "" });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -77,59 +79,44 @@ function ContactForm() {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:8080/utility/contact-form", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: formData.name.trim(),
-                    email: formData.email.trim(),
-                    subject: formData.subject.trim(),
-                    message: formData.message.trim()
-                })
-            });
+            const response = await promiseToast(
+                "http://localhost:8080/utility/contact-form",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name: formData.name.trim(),
+                        email: formData.email.trim(),
+                        subject: formData.subject.trim(),
+                        message: formData.message.trim()
+                    })
+                },
+                {
+                    loading: "Sending message...",
+                    success: (data) => data.message,
+                    error: (err) => err.message
+                }
+            );
 
-            const fromBackEnd = await response.json();
-
-            if (!response.ok) {
-                // Backend validation failed → show exact error
-                setPopupBox({ show: true, message: fromBackEnd.message || "Server error", type: "error" });
-                console.log(fromBackEnd);
-                return;
-            }
-
-            setPopupBox({ show: true, message: fromBackEnd.message, type: "success" });
-            console.log(fromBackEnd);
+            console.log(response);
 
             setFormData({ name: "", email: "", subject: "", message: "" });
             setTouched({});
+
         } catch (error) {
-            setPopupBox({ show: true, message: "Error: Server error. Please try again later.", type: "error" });
-            console.error("Error:", error);
+            console.error("Contact form error:", error);
         }
         finally {
             setLoading(false);
         }
     };
 
-    // Auto-hide popup after 3 seconds
-    useEffect(() => {
-        if (popupBox.show) {
-            const timer = setTimeout(() => {
-                setPopupBox(prev => ({ ...prev, show: false }));
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [popupBox.show]);
 
     return (
         <section className="form-section">
 
             <form className='contact-form' onSubmit={handleSubmit}>
                 <h1 className='gradient-highlight'>Contact Us</h1>
-
-                {/* Popup Alert Component */}
-                <PopupAlert show={popupBox.show} message={popupBox.message} type={popupBox.type} />
 
                 {inputFields.map(({ name, type, placeholder, maxLength }) => (
                     <InputField

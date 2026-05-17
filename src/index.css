@@ -78,3 +78,15 @@
   color: #778899;
   font-weight: 500;
 }
+
+/* Toastify Custom Styles */
+.Toastify__toast-container {
+  top: 70px !important;
+}
+
+.Toastify__toast {
+  width: max-content !important;
+  max-width: 30vw;
+  min-width: 20vw;
+  padding-right: 30px !important;
+}
